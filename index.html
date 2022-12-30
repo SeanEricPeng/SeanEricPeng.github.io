@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rubiks cube solver v2</title>
+		<link href="style.css" rel="stylesheet">
+	</head>
+	<body style="background-color: navy; overflow: hidden">
+		<center>
+			<h1><ins>Rubiks cube solver v2</ins></h1>
+		</center>
+		<center>
+			<div id="inputs" style="height: calc(100vh - 175px);">
+				</br>
+				<div style="display: block;">
+					<input type="text" id="input-text" title="List of the colours (orange=o, green=g, white=w...)" maxlength="54">
+				</div>
+				<div id="input-grid">
+					<table id="grid" style="float: left;">
+						<tr>
+							<td></td>
+							<td style="background-color: black;" id="orange"></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td style="background-color: black;" id="green"></td>
+							<td style="background-color: black;" id="white"></td>
+							<td style="background-color: black;" id="blue"></td>
+							<td style="background-color: black;" id="yellow"></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td style="background-color: black;" id="red"></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+					<div id="stats">
+						<p>Number of orange squares:&nbsp;<span id="no">9</span></p>
+						<p>Number of green squares:&nbsp;&nbsp;<span id="ng">9</span></p>
+						<p>Number of white squares:&nbsp;&nbsp;<span id="nw">9</span></p>
+						<p>Number of blue squares:&nbsp;&nbsp;&nbsp;<span id="nb">9</span></p>
+						<p>Number of yellow squares:&nbsp;<span id="ny">9</span></p>
+						<p>Number of red squares:&nbsp;&nbsp;&nbsp;&nbsp;<span id="nr">9&nbsp;</span></p>
+					</div>
+					<table id="palette">
+						<tr>
+							<td class="o" onclick="setColour(this)" style="border: 3px solid black" class="po"></td>
+							<td class="g" onclick="setColour(this)" style="border: 3px solid black" class="pg"></td>
+						</tr>
+						<tr>
+							<td class="w" onclick="setColour(this)" style="border: 3px solid black" class="pw"></td>
+							<td class="b" onclick="setColour(this)" style="border: 3px solid black" class="pb"></td>
+						</tr>
+						<tr>
+							<td class="y" onclick="setColour(this)" style="border: 3px solid black" class="py"></td>
+							<td class="r" onclick="setColour(this)" style="border: 3px solid black" class="pr"></td>
+						</tr>
+					</table>
+					<table id="palette2" style="display: none;">
+						<tr>
+							<td class="o" onclick="setColour(this)" style="border: 3px solid black" class="po"></td>
+							<td class="g" onclick="setColour(this)" style="border: 3px solid black" class="pg"></td>
+							<td class="w" onclick="setColour(this)" style="border: 3px solid black" class="pw"></td>
+						</tr>
+						<tr>
+							<td class="b" onclick="setColour(this)" style="border: 3px solid black" class="pb"></td>
+							<td class="y" onclick="setColour(this)" style="border: 3px solid black" class="py"></td>
+							<td class="r" onclick="setColour(this)" style="border: 3px solid black" class="pr"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div style="float: right; width: calc(50% - 50px); display: none; right: 50px; position: absolute;" id="yay">
+				<h2>
+					Yay! Here's the solution:
+				</h2>
+				<div id="tada"></div>
+				<hr>
+				<div id="controls" style="user-select: none;">
+					<div onclick="goToStart()" style="margin-left: 0px"><image src="./Anims/Start.png" style="width: 100%; height: 100%" draggable="false"></div>
+					<div onclick="goBack()"><image src="./Anims/Backwards.png" style="width: 100%; height: 100%" draggable="false"></image></div>
+					<div onclick="pause()"><image src="./Anims/playpause.png" style="width: 100%; height: 100%" draggable="false"></image></div>
+					<div onclick="goForwards()"><image src="./Anims/Forwards.png" style="width: 100%; height: 100%" draggable="false"></image></div>
+					<div onclick="goToEnd()"><image src="./Anims/End.png" style="width: 100%; height: 100%" draggable="false"></div>
+					<input type="range" min="0.1" max="10" value="1" id="speed" step="0.1" onclick="updateSpeed(this)">
+				</div>
+			</div>
+			<div style="float: left; position: relative; left: 50px; width: 40vw; height: 40vw;">
+				<canvas width="500" height="500" id="c" style="display: none"></canvas>
+				<canvas width="500" height="500" id="cb" style="display: none"></canvas>
+				<div id="progress"><div id="bar"><span id="progressval"></span></div></div>
+			</div>
+			<video width="500" height="500" style="display: none;" controls id="vid" src="./Anims/Fi.mp4" muted="muted">
+			</video>
+			<button onclick="solve()" id="SOLVE"><b>Solve!</b></button>
+		</center>
+		<script src="main v2.js"></script>
+	</body>
+</html>

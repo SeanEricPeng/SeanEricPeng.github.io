@@ -1,0 +1,157 @@
+body{
+	color: orange;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#SOLVE{
+	width: calc(100% - 75px);
+	height: 50px;
+	border-radius: 40px;
+	background-color: lime;
+	position: absolute;
+	left: 37.5px;
+	bottom: 30px;
+	font-size: 30px;
+	transition-duration: 0.25s;
+}
+#SOLVE:hover{
+	background-color: #0c0;
+	box-shadow: 2.5px 7px 10px;
+}
+#SOLVE:active{
+	background-color: #0a0;
+	transform: translateY(3px);
+	box-shadow: 3px 4px 10px;
+}
+h{
+	font-size: 50px;
+}
+#tada{
+	margin-top: 20px;
+	width: calc(100% - 100px);
+}
+canvas{
+	width: 500px;
+	height: 500px;
+}
+video{
+	image-rendering: pixelated;
+	width: 500px;
+	height: 500px;
+}
+#progress{
+	display: none;
+	width: 500px;
+	height: 30px;
+	background-color: red;
+	border-radius: 10px;
+	position: relative;
+	z-index: 1;
+}
+#bar{
+	background-color: green;
+	width: 0%;
+	z-index: 2;
+	height: calc(100% - 5px);
+	float: left;
+	border-radius: 10px 0px 0px 10px;
+	padding-top: 5px;
+}
+#tada{
+	height: 250px;
+	overflow: auto;
+}
+#controls div{
+	width: calc(20% - 12px);
+	float: left;
+	border: 2px solid black;
+	height: 100%;
+	margin-left: 10px;
+	background-color: orange;
+	color: black;
+	height: 100px;
+	border-radius: 20px;
+}
+#speed{
+	width: 100%;
+	height: 50px;
+	display: block;
+}
+#speed{
+	-webkit-appearance: none;
+	background: transparent;
+}
+#speed::-webkit-slider-runnable-track{
+	height: 50px;
+	border: 1px solid black;
+	background-color: lightblue;
+	height: 10px;
+	border-radius: 5px;
+}
+#speed::-webkit-slider-thumb{
+	-webkit-appearance: none;
+	background-color: orange;
+	width: 25px;
+	height: 25px;
+	margin-top: -7.5px;
+	border-radius: 50%;
+}
+#grid{
+	position: relative;
+	height: 100%;
+	max-width: 100%;
+}
+table{
+	border-spacing: 0px;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+.o{
+	background-color: orange;
+}
+.g{
+	background-color: green;
+}
+.w{
+	background-color: white;
+}
+.b{
+	background-color: blue;
+}
+.y{
+	background-color: yellow;
+}
+.r{
+	background-color: red;
+}
+#input-text{
+	font-family: monospace;
+	width: calc(100% - 75px);
+	font-weight: light;
+}
+#stats{
+	font-family: monospace;
+	height: 100%;
+	overflow: auto;
+	line-height: 100%;
+	font-size: 1.5vw;
+	text-align: left;
+	width: auto;
+	float: left;
+}
+#palette{
+	position: relative;
+	width: calc(100vw - (((100vh - 200px) * (4 / 3)) + 26vw));
+	height: 100%;
+}
+#palette2{
+	width: 100%;
+	height: 500px;
+	position: relative;
+	float: left;
+}
+#input-grid{
+	height: calc(100vh - 200px);
+	display: block;
+	justify-content: center;
+	align-items: stretch;
+}
