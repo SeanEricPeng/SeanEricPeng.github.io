@@ -159,6 +159,7 @@ function solve(){
 			vid.play();
 			draw(turnNo);
 			document.getElementById("progress").style.display = "block";
+			document.getElementById("otherStuff").style.display = "block";
 		}
 	}
 	else{
@@ -861,45 +862,68 @@ function resize(){
 		gridel.style.width = ((window.innerHeight-200)*4/3)-8+"px";
 		palette.style.display = "table";
 		palette2.style.display = "none";
-		inputG.style.flexDirection = "row";
 		stats.style.fontSize = "1.5vw";
+		stats.style.width = "auto";
 		stats.style.display = "block";
 		palette.style.width = inputG.clientWidth - (gridel.clientWidth + stats.clientWidth + 5) + "px";
+		palette.style.height = "100%";
+		console.log("a");
 	}
 	else if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 0.6){
-		if(inputG.clientHeight/3 > inputG.clientWidth/4){
+		if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 2 && (((window.innerHeight-200)/3)/((window.innerWidth-16)/4)>1.9)){
 			gridel.style.width = "100%";
 			gridel.style.height = gridel.clientWidth * 0.75 + "px";
 			palette.style.display = "none";
 			palette2.style.display = "table";
 			stats.style.display = "block";
-			stats.style.fontSize = "4vw";
+			stats.style.fontSize = "3vw";
 			stats.style.height = "auto";
+			stats.style.width = "100vw";
 			palette2.style.width = "100vw";
 			palette2.style.height = inputG.clientHeight - (gridel.clientHeight + stats.clientHeight + 5) + "px";
+			console.log("b");
+		}
+		else if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 1){
+			console.log("c");
+			gridel.style.width = "100%";
+			gridel.style.height = gridel.clientWidth * 0.75 + "px";
+			palette.style.display = "table";
+			palette2.style.display = "none";
+			stats.style.display = "block";
+			stats.style.fontSize = "4vw";
+			stats.style.height = "auto";
+			stats.style.width = "auto";
+			palette.style.width = gridel.clientWidth - (stats.clientWidth+5) + "px";
+			palette.style.height = stats.clientHeight + "px";
 		}
 		else{
 			gridel.style.height = "100%";
-			gridel.style.width = ((window.innerHeight-200)*4/3)-8+"px";
+			gridel.style.width = gridel.clientHeight * 4/3 + "px";
+			if(gridel.style.height * 4/3 > window.innerWidth){
+				console.log("hi");
+			}
 			palette.style.display = "table";
 			palette2.style.display = "none";
 			palette.style.width = inputG.clientWidth - (gridel.clientWidth+5) + "px";
 			stats.style.fontSize = "2.5vw";
 			stats.style.height = "auto";
-			palette2.style.height = inputG.clientHeight - stats.clientHeight + "px";
+			palette.style.height = "100%";
 			stats.style.display = "none";
-		}
+			console.log("d");
+		};
 	}
 	else{
 		gridel.style.height = "100%";
-		gridel.style.width = ((window.innerHeight-200)*4/3)-8+"px";
+		gridel.style.width = gridel.clientHeight * 4/3+"px";
 		palette.style.display = "none";
 		stats.style.fontSize = "2.5vw";
 		stats.style.height = "auto";
 		stats.style.display = "block";
+		stats.style.width = "auto";
 		palette2.style.height = inputG.clientHeight - stats.clientHeight + "px";
 		palette2.style.display = "table";
 		palette2.style.width = stats.clientWidth + "px";
+		console.log("e");
 	}
 }
 window.onresize = resize;
