@@ -4,6 +4,7 @@ Copyright @2022 Sean Eric Peng
 console.log("owroobbrowwybgygobogwowrrwrbrgybwbgoybgryygorwgygrywby");
 console.log("wbgyooybboggggwwyoorwgwbwgyryyybrrwbrwbwyrooggobrrorby");
 console.log("yrwbobwybgwowgoboygroywgborwygybrwrgrwrbygybrowbgrgyoo");
+console.log("rgwwoogwrborbggyrwwrbywgogowyoobbgbogrywyoyyrbwyyrrgbb");
 inputT = document.getElementById("input-text");
 inputG = document.getElementById("input-grid");
 allInputs = document.getElementById("inputs");
@@ -65,6 +66,9 @@ var F = allbtwn(18, 26);
 var R = allbtwn(27, 35);
 var B = allbtwn(36, 44);
 var D = allbtwn(45, 53);
+var faces = [U, L, F, R, B, D];
+var otherFaces = ["U", "L", "F", "R", "B", "D"];
+let order = ["F", "R", "B", "L"];
 var bar = document.getElementById("bar");
 var progress = document.getElementById("progressval");
 var M = [1, 4, 7, 19, 22, 25, 46, 49, 52, 37, 40, 43];
@@ -96,6 +100,7 @@ red = [255, 0, 0];
 turnNo = 0;
 colours = {"o": orange, "g": green, "w": white, "b": blue, "y": yellow, "r": red};
 coloursb = ["o", "g", "w", "b", "y", "r"];
+cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
 function allbtwn(numa, numb){
 	let wqr = [];
 	for(let i=numa; i<=numb; i++){
@@ -110,6 +115,16 @@ function getType(num){
 		}
 	}
 	return("c");
+}
+function otherSide(side){
+	let pairs = ["U", "L", "F", "B", "R", "D"];
+	let otherPairs = [U, L, F, B, R, D];
+	if(typeof side == "string"){
+		return pairs[[...pairs].reverse().indexOf(side)];
+	}
+	else{
+		return otherPairs[[...otherPairs].reverse().indexOf(side)];
+	}
 }
 function solve(){
 	if(inputType == 0){
@@ -137,15 +152,14 @@ function solve(){
 			edgesTodo = [1, 7, 3, 46, 50, 52, 48, 21, 23, 39, 41];
 			cornersTodo = [2, 8, 6, 45, 47, 53, 51];
 			solution = [];
-			getSolutione();
-			getSolutionc();
-			solvec();
-			if(solutione.length%2 == 1){
-				solution.push(...parityAlg);
-			}
-			solvee();
+			doCross();
+			doMiddle();
+			doTop();
+			console.log(simplify(solution).length);
+			corners2();
 			console.log("Previously was "+solution.length+" moves");
 			solution = removeRot();
+			console.log(solution);
 			solution = simplify(solution);
 			done = solution.join(" ").replace(/i/g, "'");
 			console.log(done);
@@ -156,6 +170,7 @@ function solve(){
 			allInputs.style.display = "none";
 			cb.style.display = "block";
 			vid.src = "./Anims/"+solution[0]+".mp4";
+			vid.load();
 			vid.play();
 			draw(turnNo);
 			document.getElementById("progress").style.display = "block";
@@ -163,11 +178,20 @@ function solve(){
 		}
 	}
 	else{
-		console.log("idk");
+		error();
 	}
 }
 function error(){
+	throw "hi";
 	alert("Something went wrong...");
+}
+function checkPosition(piece){
+	if([piece, second(piece), third(piece)].includes(locatePiece(piece))){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 function checkValidity(){
 	if(scrCube.length == 54){
@@ -227,11 +251,17 @@ function findPiece(piece, arr = scrCube){
 function findTruePiece(piece){
 	return(findPiece(piece, target));
 }
+function originalPos(piece){
+	return(findTruePiece(getColour(piece, scrCube)));
+}
 function getColour(piece, arr=scrCube){
 	if(getType(piece) == "c"){
-		return([scrCube[piece], scrCube[second(piece)], scrCube[third(piece)]]);
+		return([arr[piece], arr[second(piece)], arr[third(piece)]]);
 	}
-	return([scrCube[piece], scrCube[pair(piece)]]);
+	return([arr[piece], arr[pair(piece)]]);
+}
+function locatePiece(piece){
+	return(findPiece(getColour(piece, target)));
 }
 function pair(other){
 	if(firstEdges.includes(other)){
@@ -268,17 +298,12 @@ function third(otherb){
 	}
 }
 function checkIfSolved(thing){
-	if(getType(thing) == "e"){
-		if((scrCube[thing] == target[thing]) && (scrCube[pair[thing]] == target[pair[thing]])){
-			return(true);
-		}
+	if(locatePiece(thing) == thing){
+		return true;
 	}
 	else{
-		if((scrCube[thing] == target[thing]) && (scrCube[second[thing]] == target[second[thing]]) && (scrCube[third[thing]] == target[third[thing]])){
-			return(true);
-		}
+		return false;
 	}
-	return(false);
 }
 function removeFromTodo(what){
 	if(edgesTodo.includes(what)){
@@ -299,7 +324,7 @@ function removeFromTodoc(whatc){
 		cornersTodo.splice(cornersTodo.indexOf(third(whatc)), 1);
 	};
 }
-function getSolutione(){
+/*function getSolutione(){
 	let doneFirst = false;
 	while(edgesTodo.length != 0){
 		if(checkIfSolved(edgesTodo[0])){
@@ -376,7 +401,7 @@ function getSolutionc(){
 		doneFirst = true;
 	}
 	console.log(solutionc);
-}
+}*/
 /*****************************************************************************************************************************************************/
 function turn(turntd){
 	solution.push(turntd);
@@ -460,6 +485,7 @@ function val(what){
 }
 function simplify(start){
 	let tmp = start;
+	startL = tmp.length;
 	let tmpa = [];
 	let stuffToAdd;
 	for(i=0; i<tmp.length; i++){
@@ -475,7 +501,12 @@ function simplify(start){
 			tmpa.push(currBase+newerVal[stuffToAdd%4]);
 		}
 	}
-	return tmpa;
+	if(tmpa.length<startL){
+		return(simplify(tmpa));
+	}
+	else{
+		return tmpa;
+	}
 }
 function undo(what){
 	let newwhat = [];
@@ -492,7 +523,7 @@ function undo(what){
 	}
 	return(newwhat.reverse());
 }
-function solvec(){
+/*function solvec(){
 	let currSol = [];
 	for(let i=0; i<solutionc.length; i++){
 		posNow = solutionc[i];
@@ -532,8 +563,323 @@ function solvec(){
 		}
 		solution.push(...undo(currSol));
 	}
+}*/
+function corners2(){
+	console.log(allSolved());
+	while(!allSolved()){
+		setup = [];
+		let targets = pickPieces().map(originalPos);
+		originalCube = [...scrCube];
+		baseFace = 0;
+		doSetup(targets);
+		console.log(...targets.map(locatePiece));
+		for(let i of setup){
+			solution.push(i);
+		}
+		console.log(ready(...targets));
+		swap(...targets, ready(...targets));
+		for(let i of undo(setup)){
+			scrCube.doMove(i);
+			solution.push(i);
+		};
+	}
+	function doSetup(tmpTargets){
+		let base18 = "0123456789abcdefgh";
+		originalC = [...scrCube];
+		if(ready(...tmpTargets) != false){
+			return ready(...tmpTargets);
+		}
+		for(let i=0; i<5832; i++){
+			scrCube = [...originalCube];
+			for(let j=0; j<i.toString(18).length; j++){
+				scrCube.doMove(tmpc(base18.indexOf(i.toString(18)[j])));
+			}
+			if(ready(...tmpTargets)){
+				for(let j=0; j<i.toString(18).length; j++){
+					setup.push(tmpc(base18.indexOf(i.toString(18)[j])));
+				}
+				return(ready(...tmpTargets));
+			}
+		}
+		error();
+	}
+	function tmpc(thingya){
+		return otherFaces[Math.floor(thingya/3)]+newerVal[thingya%3+1];
+	}
+	function pickPieces(){
+		let tmp;
+		let pieces = [];
+		for(let i of firstCorners){
+			if(!checkIfSolved(i)){
+				tmp = i;
+				if(!checkIfTwisted(i)){
+					return step2();
+					break;
+				}
+			}
+		}
+		return step2();
+		function step2(){
+			for(let i=0; i<3; i++){
+				if(!checkIfSolved(tmp) && !pieces.includes(originalPos(tmp)) && !pieces.includes(second(originalPos(tmp))) && !pieces.includes(third(originalPos(tmp)))){
+					pieces.push(originalPos(tmp));
+					tmp = originalPos(tmp);
+				}
+				else{
+					let sorted = false;
+					tmp = undefined;
+					for(let j of firstCorners){
+						if(!pieces.includes(j) && !pieces.includes(second(j)) && !pieces.includes(third(j))){
+							if(!checkIfSolved(j)){
+								if(!checkIfTwisted(j)){
+									pieces.push(j);
+									tmp = j;
+									sorted = true;
+									break;
+								}
+								else{
+									tmp = j;
+								}
+							}
+							if(tmp == undefined){
+								tmp = j;
+							}
+						}
+					}
+					if(!sorted){
+						pieces.push(tmp);
+					}
+				}
+			}
+			return pieces;
+		}
+	}
+	function checkIfTwisted(piece){
+		if(checkPosition(piece) && checkIfSolved(piece)){
+			return true;
+		}
+		return false;
+	}
+	function getOrientation(piece){
+		if(firstCorners.includes(piece)){
+			return 0;
+		}
+		else if(secondCorners.includes(piece)){
+			return 1;
+		}
+		else{
+			return 2;
+		}
+	}
+	function allSolved(){
+		for(let i of firstCorners){
+			if(!checkIfSolved(i)){
+				return false;
+			}
+		}
+		return true;
+	}
+	function ready(origa, origb, origc){
+		let newa = locatePiece(origa);
+		let newb = locatePiece(origb);
+		let newc = locatePiece(origc);
+		let cycle = [newa, newb, newc];
+		for(let i of otherFaces){
+			let k = 0;
+			for(let j of cycle){
+				if(pieceIn(j, window[i])){
+					k++;
+				}
+			}
+			if(k==0 || k==1 || k==3){
+				continue;	
+			}
+			else{
+				for(let j=1; j<4; j++){
+					for(let k=0; k<3; k++){
+						if(pieceIn(cycle[k], window[i]) && !(pieceIn(cycle[(k+1)%3], window[i]) && pieceIn(cycle[(k+2)%3], window[i]))){
+							if(cycle.includes(testMove(i+newerVal[j], cycle[k]))){
+								if(!((rotationOffset(cycle[k], window[i]) == rotationOffset(cycle[(k+1)%3], window[i])) && (rotationOffset(cycle[k], window[i]) == rotationOffset(cycle[(k+2)%3], window[i])))){
+									return i;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	function swap(piecea, pieceb, piecec, baseF){
+		let [positionA, positionB, positionC] = [piecea, pieceb, piecec].map(locatePiece);
+		let startPos = [positionA, positionB, positionC];
+		let currPos = [piecea, pieceb, piecec];
+		console.log(startPos);
+		let special;
+		let important;
+		let sideSetup = [];
+		let mainSetup = [];
+		let rotationNeeded;
+		for(let i of startPos){
+			if(!pieceIn(i, window[baseF])){
+				special = i;
+			}
+		}
+		for(let i=0; i<4; i++){
+			if(typeof specificPos() == "number"){
+				important = specificPos();
+				break;
+			}
+			scrCube.doMove(baseF);
+			sideSetup.push(baseF);
+		}
+		rotationNeeded = (rotationOffset(special, window[baseF]) - rotationOffset(important, window[baseF]) + 3) % 3;
+		if(rotationNeeded == 2){
+			let mainFace;
+			let sideFace;
+			switch(rotationOffset(special, window[baseF])){
+				case 0:
+					mainFace = cFace[target[important]];
+					sideFace = cFace[target[third(important)]];
+					break;
+				case 1:
+					mainFace = cFace[target[third(important)]];
+					sideFace = cFace[target[second(important)]];
+					break;
+				default:
+					mainFace = cFace[target[third(important)]];
+					sideFace = cFace[target[second(important)]];
+			}
+			if(pieceIn(special, window[mainFace]) && pieceIn(special, window[sideFace])){
+				scrCube.doMove(mainFace);
+				mainSetup.push(mainFace);
+				scrCube.doMove(otherSide(baseF));
+				mainSetup.push(otherSide(baseF));
+				scrCube.doMove(mainFace+"i");
+				mainSetup.push(mainFace+"i");
+				finishOff();
+				return;
+			}
+			if(pieceIn(special, window[sideFace]) && pieceIn(special, window[otherSide(mainFace)])){
+				scrCube.doMove(otherSide(baseF));
+				mainSetup.push(otherSide(baseF));
+			}
+			scrCube.doMove(sideFace+"i");
+			mainSetup.push(sideFace+"i");
+			if(pieceIn(special, window[mainFace])){
+				scrCube.doMove(otherSide(baseF));
+				mainSetup.push(otherSide(baseF));
+			}
+			else{
+				scrCube.doMove(otherSide(baseF)+"2");
+				mainSetup.push(otherSide(baseF)+"2");
+			}
+			scrCube.doMove(sideFace);
+			mainSetup.push(sideFace);
+			finishOff();
+			return;
+		}
+		else{
+			let mainFace;
+			let sideFace;
+			switch(rotationOffset(special, window[baseF])){
+				case 0:
+					mainFace = cFace[target[important]];
+					sideFace = cFace[target[second(important)]];
+					break;
+				case 1:
+					mainFace = cFace[target[second(important)]];
+					sideFace = cFace[target[third(important)]];
+					break;
+				default:
+					mainFace = cFace[target[third(important)]];
+					sideFace = cFace[target[important]];
+			}
+			if(pieceIn(special, window[mainFace]) && pieceIn(special, window[sideFace])){
+				scrCube.doMove(mainFace+"i");
+				mainSetup.push(mainFace+"i");
+				scrCube.doMove(otherSide(baseF)+"i");
+				mainSetup.push(otherSide(baseF)+"i");
+				scrCube.doMove(mainFace);
+				mainSetup.push(mainFace);
+				finishOff();
+				return;
+			}
+			if(pieceIn(special, window[sideFace]) && pieceIn(special, window[otherSide(mainFace)])){
+				scrCube.doMove(otherSide(baseF)+"i");
+				mainSetup.push(otherSide(baseF)+"i");
+			}
+			scrCube.doMove(sideFace);
+			mainSetup.push(sideFace);
+			if(pieceIn(special, window[mainFace])){
+				scrCube.doMove(otherSide(baseF)+"i");
+				mainSetup.push(otherSide(baseF)+"i");
+			}
+			else{
+				scrCube.doMove(otherSide(baseF)+"2");
+				mainSetup.push(otherSide(baseF)+"2");
+			}
+			scrCube.doMove(sideFace+"i");
+			mainSetup.push(sideFace+"i");
+			finishOff();
+			return;
+		}
+		function finishOff(){
+			solution.push(...sideSetup);
+			solution.push(...mainSetup);
+			for(let i of undo(sideSetup)){
+				solution.push(i);
+				scrCube.doMove(i);
+			}
+			for(let i of undo(mainSetup)){
+				solution.push(i);
+				scrCube.doMove(i);
+			}
+		}
+		function specificPos(){
+			for(let i=0; i<currPos.length; i++){
+				if(locatePiece(currPos[i]) == startPos[(i+1)%3]){
+					return locatePiece(currPos[i]);
+				}
+			}
+			return false;
+		}
+	}
+	function swapB(piecea, pieceb, piecec){
+		let firstPiece = [[piecea, second(piecea), third(piecea)], [pieceb, second(pieceb), third(pieceb)], [piecec, second(piecec), third(piecec)]];
+		let newPiece = [];
+		if(pieceb == piecec){
+			error();
+			return;
+		}
+		for(let i=0; i<3; i++){
+			newPiece.push([]);
+			for(let j=0; j<3; j++){
+				newPiece[i].push(scrCube[firstPiece[i][j]]);
+			}
+		}
+		for(let i=0; i<3; i++){
+			for(let j=0; j<3; j++){
+				scrCube[firstPiece[(i+1)%3][j]] = newPiece[i][j];
+			}
+		}
+	}
 }
-function solvee(){
+function rotationOffset(targetPiece, targetFace){
+	let tmpPiece = targetPiece;
+	let endResult = 0;
+	while(!(targetFace.includes(tmpPiece) || otherSide(targetFace).includes(tmpPiece))){
+		for(let i=0; i<24; i++){
+			if(corners[Math.floor(i/3)][i%3] == tmpPiece){
+				tmpPiece = corners[Math.floor(i/3)][(i+1)%3];
+				break;
+			}
+		}
+		endResult++;
+	}
+	return endResult;
+}
+/*function solvee(){
 	let currSol = [];
 	for(let i=0; i<solutione.length; i++){
 		posNow = solutione[i];
@@ -576,7 +922,7 @@ function solvee(){
 		}
 		solution.push(...undo(currSol));
 	}
-}
+}*/
 /*****************************************************************************************************************************************************/
 function getValue(what){
 	if(what.length == 1){
@@ -595,7 +941,6 @@ function getValue(what){
 function removeRot(){
 	let tmp = [];
 	let currRot = undefined;
-	let currVal;
 	for(let i=0; i<solution.length; i++){
 		if(["x", "y", "z"].includes(base(solution[i]))){
 			if(currRot == undefined){
@@ -642,7 +987,7 @@ vid.addEventListener("ended", function(){
 		turnNo++;
 		vid.onloadeddata = function(){
 			vid.play();
-			vid.addEventListener("play", function(){setTimeout(draw, 20)}, {once: true});
+			vid.addEventListener("play", function(){setTimeout(draw, 50)}, {once: true});
 		}
 	}
 });
@@ -711,33 +1056,50 @@ function changeColour(what, colour){
 }
 function getAllColours(){
 	allStates = [];
+	scrCube = inputT.value.split("");
 	allStates.push([...scrCube]);
 	let tmp = scrCube;
 	for(let i=0; i<solution.length; i++){
-		tmp = doMove(tmp, solution[i]);
-		allStates.push(tmp);
+		tmp.doMove(solution[i]);
+		allStates.push([...tmp]);
 	}
 	return(allStates);
 }
-function doMove(what, move){
+Array.prototype.doMove = function(move){
 	let tmp = [];
-	for(let i=0; i<what.length; i++){
-		if(pieceIn(i, window[base(move).toUpperCase()])){
+	for(let i=0; i<this.length; i++){
+		if("xyz".includes(move) || pieceIn(i, window[base(move).toUpperCase()])){
 			if(val(move) == 3){
-				tmp.push(what[window[base(move).toLowerCase()](i)]);
+				tmp.push(this[window[base(move).toLowerCase()](i)]);
 			}
 			else if(val(move) == 2){
-				tmp.push(what[window[base(move).toLowerCase()](window[base(move).toLowerCase()](i))]);
+				tmp.push(this[window[base(move).toLowerCase()](window[base(move).toLowerCase()](i))]);
 			}
 			else if(val(move) == 1){
-				tmp.push(what[window[base(move).toLowerCase()](window[base(move).toLowerCase()](window[base(move).toLowerCase()](i)))]);
+				tmp.push(this[window[base(move).toLowerCase()](window[base(move).toLowerCase()](window[base(move).toLowerCase()](i)))]);
 			}
 		}
 		else{
-			tmp.push(what[i]);
+			tmp.push(this[i]);
 		}
 	}
-	return([...tmp]);
+	this.splice(0, this.length, ...tmp);
+}
+function testMove(move, piece){
+	if(pieceIn(piece, window[base(move)])){
+		if(val(move) == 1){
+			return(window[base(move).toLowerCase()](piece));
+		}
+		else if(val(move) == 2){
+			return(window[base(move).toLowerCase()](window[base(move).toLowerCase()](piece)));
+		}
+		else if(val(move) == 3){
+			return(window[base(move).toLowerCase()](window[base(move).toLowerCase()](window[base(move).toLowerCase()](piece))));
+		}
+	}
+	else{
+		return(piece);
+	}
 }
 function edit(){
 	for(let i=0; i<bob.data.length; i+=4){
@@ -774,7 +1136,6 @@ for(let i=0; i<6; i++){
 	firstThingy.style.borderSpacing = "seperate";
 	firstThingy.style.height = "100%";
 	firstThingy.style.width = "100%";
-	firstThingy.style.backgroundColor = "black";
 	grids[i].appendChild(firstThingy);
 	for(let j=0; j<3; j++){
 		let thingy = document.createElement("tr");
@@ -928,3 +1289,477 @@ function resize(){
 }
 window.onresize = resize;
 window.onload = resize;
+/*****************************************************************************************************************************************************/
+function doCross(){
+	let unsolved = [];
+	let stuffToDo = [46, 50, 52, 48];
+	let alreadyDone = 0;
+	for(let i=0; i<stuffToDo.length; i++){
+		if(!checkIfSolved(stuffToDo[i])){
+			unsolved.push(stuffToDo[i]);
+		}
+	}
+	if(unsolved.length == 4){
+		for(let i of unsolved){
+			if(scrCube[i] == "r"){
+				let j = originalPos(i);
+				while(!checkIfSolved(locatePiece(j))){
+					solution.push("D");
+					scrCube.doMove("D");
+				}
+				unsolved.splice(unsolved.indexOf(j), 1);
+				break;
+			}
+		}
+	}
+	for(let i=0; i<unsolved.length; i++){
+		if(i==0 && unsolved.length == 4){
+			let j = getFace(locatePiece(pair(unsolved[i])));
+			if((j == "U") || (j == "D")){
+				scrCube.doMove(getFace(locatePiece(unsolved[i])));
+				solution.push(getFace(locatePiece(unsolved[i])));
+				j = getFace(locatePiece(pair(unsolved[i])));
+			}
+			while(!stuffToDo.includes(locatePiece(unsolved[i]))){
+				solution.push(j);
+				scrCube.doMove(j);
+			}
+			while(!checkIfSolved(unsolved[i])){
+				solution.push("D");
+				scrCube.doMove("D");
+			}
+		}
+		else{
+			let undoMs = [];
+			while(!window[order[stuffToDo.indexOf(unsolved[i])]].includes(locatePiece(pair(unsolved[i])))){
+				let currPos = locatePiece(unsolved[i]);
+				if(E.includes(currPos)){
+					solution.push("e");
+					scrCube.doMove("e");
+					undoMs.push("ei");
+				}
+				else if(U.includes(currPos)){
+					solution.push("U");
+					scrCube.doMove("U");
+				}
+				else if(U.includes(pair(currPos))){
+					if(checkIfSolved(window[getFace(currPos)][7])){
+						undoMs.push(getFace(currPos)+"i");
+					}
+					solution.push(getFace(currPos));
+					scrCube.doMove(getFace(currPos));
+				}
+				else if(D.includes(pair(currPos))){
+					solution.push(getFace(currPos));
+					scrCube.doMove(getFace(currPos));
+				}
+				else if(D.includes(currPos)){
+					solution.push(getFace(pair(currPos)));
+					scrCube.doMove(getFace(pair(currPos)));
+				}
+				else{
+					console.log("nooooooooooooooooooooooo!");
+				}
+			}
+			while(!checkIfSolved(unsolved[i])){
+				solution.push(getFace(pair(unsolved[i])));
+				scrCube.doMove(getFace(pair(unsolved[i])));
+			}
+			undoMs.reverse();
+			for(let j of undoMs){
+				solution.push(j);
+				scrCube.doMove(j);
+			}
+			solution = simplify(solution);
+			console.log(solution);
+		}
+	}
+	for(let i of stuffToDo){
+		if(!checkIfSolved(i)){
+			error();
+		}
+	}
+}
+function doMiddle(){
+	let unsolved = [];
+	let stuffToDo = [12, 14, 21, 23, 30, 32, 39, 41];
+	for(let i=0; i<stuffToDo.length; i++){
+		if(!checkIfSolved(stuffToDo[i])){
+			unsolved.push(stuffToDo[i]);
+		}
+	}
+	while(unsolved.length > 2){
+		for(let k of U){
+			if((getType(k) == "e") && !getColour(k).includes("o")){
+				let goal = originalPos(originalPos(pair(k)));
+				let stuff = originalPos(pair(k));
+				if(getFace(pair(k)) == getFace(stuff)){
+					solution.push("U");
+					scrCube.doMove("U");
+				}
+				let undoMs = [];
+				while(!U.includes(pair(locatePiece(goal)))){
+					solution.push(getFace(stuff));
+					scrCube.doMove(getFace(stuff));
+					undoMs.push(getFace(stuff) + "i");
+				}
+				while(getFace(stuff) != getFace(locatePiece(stuff))){
+					solution.push("U");
+					scrCube.doMove("U");
+				}
+				undoMs.reverse();
+				for(let j of undoMs){
+					solution.push(j);
+					scrCube.doMove(j);
+				}
+				unsolved.splice(unsolved.indexOf(stuff), 1);
+				unsolved.splice(unsolved.indexOf(pair(stuff)), 1);
+			}
+			if(unsolved.length <= 2){
+				break;
+			}
+		}
+		if(unsolved.length>2){
+			solution.push(getFace(unsolved[0]));
+			scrCube.doMove(getFace(unsolved[0]));
+			solution.push("U");
+			scrCube.doMove("U");
+			solution.push(getFace(unsolved[0]) + "i");
+			scrCube.doMove(getFace(unsolved[0]) + "i");
+		}
+	}
+}
+function doTop(){
+	let mOffset = 0;
+	let tmp = [];
+	let ml = [23, 21, 41, 39];
+	let conversion = [1, 5, 7, 3];
+	for(let i of ml){
+		if(checkIfSolved(i)){
+			mOffset++;
+		}
+		else{
+			break;
+		}
+	}
+	if(mOffset != 4){
+		for(let i=0; i<mOffset; i++){
+			solution.push("e");
+			scrCube.doMove("e");
+			tmp.push("e");
+		}
+	}
+	while(topOriented() == false){
+		if(scrCube[23] == "o"){
+			rotateUntil("U", 5, 1);
+			scrCube.doMove("R");
+			solution.push("R");
+			rotateUntil("U", 5, 2);
+			scrCube.doMove("Ri");
+			solution.push("Ri");
+		}
+		else if(scrCube[30] == "o"){
+			rotateUntil("U", 7, 1);
+			scrCube.doMove("Fi");
+			solution.push("Fi");
+			rotateUntil("U", 7, 2);
+			scrCube.doMove("F");
+			solution.push("F");
+		}
+		else{
+			scrCube.doMove("R");
+			solution.push("R");
+			rotateUntil("U", 5, 2);
+			scrCube.doMove("Ri");
+			solution.push("Ri");
+		}
+	}
+	if(!getColour(23).includes("o")){
+		if(scrCube[1]+scrCube[5]+scrCube[7]+scrCube[3] == "oooo"){
+			if(topPermutated() != 4){
+				while(![1, 4].includes(topPermutated())){
+					scrCube.doMove("U");
+					solution.push("U");
+				}
+				if(topPermutated() == 4){
+					finish();
+					return;
+				}
+				else{
+					let tmpb = false;
+					let pivot;
+					for(let i of conversion){
+						if(checkIfSolved(i)){
+							pivot = i;
+							break;
+						}
+					}
+					if(pivot == undefined){
+						error();
+						return;
+					}
+					if(originalPos(conversion[(conversion.indexOf(pivot)+1)%4]) == conversion[(conversion.indexOf(pivot)+2)%4]){
+						tmpb = true;
+					}
+					while(locatePiece(pivot) != 7){
+						scrCube.doMove("U");
+						solution.push("U");
+					}
+					if(tmpb){
+						for(let i of "LiUiLUiLiU2L".split(/(?=[A-Z])/)){
+							scrCube.doMove(i);
+							solution.push(i);
+						}
+					}
+					else{
+						for(let i of "RURiURU2Ri".split(/(?=[A-Z])/)){
+							scrCube.doMove(i);
+							solution.push(i);
+						}
+					}
+				}
+				finish();
+				return;
+			}
+		}
+		else{
+			if(scrCube[28] == "o"){
+				for(let i of "URUiRi".split(/(?=[A-Z])/)){
+					scrCube.doMove(i);
+					solution.push(i);
+				}
+			}
+			else{
+				scrCube.doMove("R");
+				solution.push("R");
+				while(scrCube[28] != "o"){
+					scrCube.doMove("U");
+					solution.push("U");
+				}
+				scrCube.doMove("Ri");
+				solution.push("Ri");
+			}
+		}
+	}
+	if(scrCube[23] == "o"){
+		rotateUntil("U", 0, 3);
+		if(topPermutated() == 4){
+			return;
+		}
+		else if(topPermutated() == 3){
+			while(scrCube[7] == "o"){
+				scrCube.doMove("U");
+				solution.push("U");
+			}
+			for(let i of "RURiURURi".split(/(?=[A-Z])/)){
+				scrCube.doMove(i);
+				solution.push(i);
+			}
+			while(scrCube[19] != "w"){
+				scrCube.doMove("U");
+				solution.push("U");
+			}
+		}
+		else if(topPermutated() == 0){
+			let offset = 1;
+			let targetOffset;
+			let tmpa = 0;
+			let targets = [];
+			let currentPos = 23;
+			while(targets.length<4){
+				currentPos = originalPos(currentPos);
+				targets.push(conversion.indexOf(currentPos));
+			}
+			for(let i=0; i<3; i++){
+				targetOffset = targets[i];
+				while(offset != targetOffset){
+					scrCube.doMove("U");
+					solution.push("U");
+					offset--;
+					if(offset == -1){
+						offset = 3;
+					}
+				}
+				scrCube.doMove("R");
+				solution.push("R");
+				targetOffset = targets[++i];
+				while(offset != targetOffset){
+					scrCube.doMove("U");
+					solution.push("U");
+					offset--;
+					if(offset == -1){
+						offset = 3;
+					}
+				}
+				scrCube.doMove("Ri");
+				solution.push("Ri");
+			}
+		}
+		else{
+			rotateUntil("U", 5, 4);
+			scrCube.doMove("R");
+			solution.push("R");
+			rotateUntil("U", 5, 5);
+			scrCube.doMove("Ri");
+			solution.push("Ri");
+		}
+	}
+	else if(scrCube[30] == "o"){
+		rotateUntil("U", 1, 3);
+		if(topPermutated() == 4){
+			return;
+		}
+		else if(topPermutated() == 3){
+			while(scrCube[5] == "o"){
+				scrCube.doMove("U");
+				solution.push("U");
+			}
+			for(let i of "FiUiFUiFiUiF".split(/(?=[A-Z])/)){
+				scrCube.doMove(i);
+				solution.push(i);
+			}
+			while(scrCube[19] != "w"){
+				scrCube.doMove("U");
+				solution.push("U");
+			}
+		}
+		else if(topPermutated() == 0){
+			let offset = 2;
+			let targetOffset;
+			let tmpa = 0;
+			let targets = [];
+			let currentPos = 30;
+			while(targets.length<4){
+				currentPos = originalPos(currentPos);
+				targets.push(conversion.indexOf(currentPos));
+			}
+			for(let i=0; i<3; i++){
+				targetOffset = targets[i];
+				while(offset != targetOffset){
+					scrCube.doMove("U");
+					solution.push("U");
+					offset--;
+					if(offset == -1){
+						offset = 3;
+					}
+				}
+				scrCube.doMove("Fi");
+				solution.push("Fi");
+				targetOffset = targets[++i];
+				while(offset != targetOffset){
+					scrCube.doMove("U");
+					solution.push("U");
+					offset--;
+					if(offset == -1){
+						offset = 3;
+					}
+				}
+				scrCube.doMove("F");
+				solution.push("F");
+			}
+		}
+		else{
+			rotateUntil("U", 7, 4);
+			scrCube.doMove("Fi");
+			solution.push("Fi");
+			rotateUntil("U", 7, 5);
+			scrCube.doMove("F");
+			solution.push("F");
+		}
+	}
+	finish();
+	function finish(){
+		while(mOffset < 4){
+			solution.push("e");
+			scrCube.doMove("e");
+			mOffset ++;
+		}
+		while(scrCube[19] != "w"){
+			scrCube.doMove("U");
+			solution.push("U");
+		}
+	}
+	function topOriented(){
+		let incorrect = 0;
+		for(let i of U){
+			if((getType(i) == "e") && (scrCube[i] != "o")){
+				incorrect ++;
+				if(incorrect>1){
+					return false;
+				}
+			}
+		}
+		if(incorrect>1){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	function topPermutated(){
+		let correct = 0;
+		for(let i of U){
+			if((getType(i) == "e") && checkIfSolved(i)){
+				correct++;
+			}
+		}
+		return(correct);
+	}
+	function rotateUntil(face, piece, condition=1){
+		if(condition == 1){
+			while(getColour(piece).includes("o")){
+				scrCube.doMove(face);
+				solution.push(face);
+			}
+		}
+		else if(condition == 2){
+			while(scrCube[pair(piece)] != "o"){
+				scrCube.doMove(face);
+				solution.push(face);
+			}
+		}
+		else if(condition == 3){
+			let osdif = 0;
+			while(![2, 4].includes(topPermutated())){
+				scrCube.doMove(face);
+				solution.push(face);
+				osdif++;
+				if(osdif>=4){
+					break;
+				}
+			}
+			if(osdif == 4){
+				osdif = 0;
+				while(topPermutated() != 3){
+					scrCube.doMove(face);
+					solution.push(face);
+					osdif++;
+					if((osdif>=4) && (topPermutated()==0) && (scrCube[(piece == 0) ? 5 : 7] == "o")){
+						break;
+					}
+				}
+			}
+		}
+		else if(condition == 4){
+			let firstPos = originalPos(originalPos((piece==5) ? 23 : 30));
+			while(locatePiece(firstPos) != piece){
+				scrCube.doMove(face);
+				solution.push(face);
+			}
+		}
+		else if(condition == 5){
+			let firstPos = originalPos(piece);
+			while(scrCube[piece] == "o"){
+				scrCube.doMove(face);
+				solution.push(face);
+			}
+		}
+	}
+}
+function getFace(piece){
+	for(let i=0; i<6; i++){
+		if(faces[i].includes(piece)){
+			return(otherFaces[i]);
+		}
+	}
+}
