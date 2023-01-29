@@ -12,14 +12,11 @@ target = "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr".split("");
 inputT.value = "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr";
 scrCube = [];
 cube = [];
-solutione = [];
-solutionc = [];
 solution = [];
 inputType = 0;
-edgesTodo = [1, 7, 3, 46, 50, 52, 48, 21, 23, 39, 41];
-cornersTodo = [2, 8, 6, 45, 47, 53, 51];
 done = "";
 turnValues = ["", "2", "i"];
+const theConsole = console.log;
 var allStates;
 var currColour = "o";
 var parityAlg = ["yi", "L", "U2", "Li", "U2", "L", "Fi", "Li", "Ui", "L", "U", "L", "F", "L2", "U", "y"];
@@ -126,7 +123,7 @@ function otherSide(side){
 		return otherPairs[[...otherPairs].reverse().indexOf(side)];
 	}
 }
-function solve(){
+function solve(doAll = true){
 	if(inputType == 0){
 		scrCube = inputT.value.split("");
 		if(checkValidity() == false){
@@ -139,6 +136,9 @@ function solve(){
 			alert("Mix it up first.");
 		}
 		else{
+			vid.pause();
+			cancelAnimationFrame(request);
+			turnNo = 0;
 			scrCube[4] = "o";
 			scrCube[13] = "g";
 			scrCube[22] = "w";
@@ -147,39 +147,60 @@ function solve(){
 			scrCube[49] = "r";
 			console.log(scrCube);
 			document.getElementById("yay").style.display = "none";
-			solutione = [];
-			solutionc = [];
-			edgesTodo = [1, 7, 3, 46, 50, 52, 48, 21, 23, 39, 41];
-			cornersTodo = [2, 8, 6, 45, 47, 53, 51];
 			solution = [];
 			doCross();
+			console.log("m");
 			doMiddle();
+			console.log("t");
+			console.log(scrCube.join(""));
 			doTop();
-			console.log(simplify(solution).length);
+			console.log("c");
+			console.log(scrCube.join(""));
 			corners2();
-			console.log("Previously was "+solution.length+" moves");
-			solution = removeRot();
-			console.log(solution);
 			solution = simplify(solution);
-			done = solution.join(" ").replace(/i/g, "'");
-			console.log(done);
-			document.getElementById("tada").innerText = done;
-			document.getElementById("yay").style.display = "block";
-			console.log("Now solved in "+solution.length+" moves");
-			getAllColours();
-			allInputs.style.display = "none";
-			cb.style.display = "block";
-			vid.src = "./Anims/"+solution[0]+".mp4";
-			vid.load();
-			vid.play();
-			draw(turnNo);
-			document.getElementById("progress").style.display = "block";
-			document.getElementById("otherStuff").style.display = "block";
+			if(doAll){
+				done = solution.join(" ").replace(/i/g, "'");
+				console.log(done);
+				document.getElementById("tada").innerText = done;
+				document.getElementById("yay").style.display = "block";
+				console.log("Now solved in "+solution.length+" moves");
+				getAllColours();
+				allInputs.style.display = "none";
+				cb.style.display = "block";
+				vid.src = "./Anims/"+solution[0]+".mp4";
+				vid.load();
+				vid.play();
+				draw(turnNo);
+				document.getElementById("progress").style.display = "block";
+				document.getElementById("otherStuff").style.display = "block";
+			}
+			else{
+				return solution.length;
+			}
 		}
 	}
 	else{
 		error();
 	}
+}
+function randomScramble(doAll = true){
+	let tmpd = [...target];
+	for(let i=0; i<20; i++){
+		tmpd.doMove(tmpc(Math.floor(Math.random()*18)));
+	}
+	inputT.value = tmpd.join("");
+	return solve(doAll);
+}
+function testSeveral(amount){
+	console.log = function(){}
+	let soFar = 0;
+	let startTime = Date.now();
+	for(let i=0; i<amount; i++){
+		soFar += randomScramble(false);
+	}
+	let endTime = Date.now()
+	console.log = theConsole;
+	console.log({"Average moves": soFar/amount, "Average time (ms)": (endTime-startTime)/amount, "Total time (ms)": endTime-startTime});
 }
 function error(){
 	throw "hi";
@@ -305,7 +326,7 @@ function checkIfSolved(thing){
 		return false;
 	}
 }
-function removeFromTodo(what){
+/*function removeFromTodo(what){
 	if(edgesTodo.includes(what)){
 		edgesTodo.splice(edgesTodo.indexOf(what), 1);
 	}
@@ -324,7 +345,7 @@ function removeFromTodoc(whatc){
 		cornersTodo.splice(cornersTodo.indexOf(third(whatc)), 1);
 	};
 }
-/*function getSolutione(){
+function getSolutione(){
 	let doneFirst = false;
 	while(edgesTodo.length != 0){
 		if(checkIfSolved(edgesTodo[0])){
@@ -576,7 +597,6 @@ function corners2(){
 		for(let i of setup){
 			solution.push(i);
 		}
-		console.log(ready(...targets));
 		swap(...targets, ready(...targets));
 		for(let i of undo(setup)){
 			scrCube.doMove(i);
@@ -602,9 +622,6 @@ function corners2(){
 			}
 		}
 		error();
-	}
-	function tmpc(thingya){
-		return otherFaces[Math.floor(thingya/3)]+newerVal[thingya%3+1];
 	}
 	function pickPieces(){
 		let tmp;
@@ -714,7 +731,6 @@ function corners2(){
 		let [positionA, positionB, positionC] = [piecea, pieceb, piecec].map(locatePiece);
 		let startPos = [positionA, positionB, positionC];
 		let currPos = [piecea, pieceb, piecec];
-		console.log(startPos);
 		let special;
 		let important;
 		let sideSetup = [];
@@ -743,8 +759,8 @@ function corners2(){
 					sideFace = cFace[target[third(important)]];
 					break;
 				case 1:
-					mainFace = cFace[target[third(important)]];
-					sideFace = cFace[target[second(important)]];
+					mainFace = cFace[target[second(important)]];
+					sideFace = cFace[target[important]];
 					break;
 				default:
 					mainFace = cFace[target[third(important)]];
@@ -865,6 +881,9 @@ function corners2(){
 		}
 	}
 }
+function tmpc(thingya){
+	return otherFaces[Math.floor(thingya/3)]+newerVal[thingya%3+1];
+}
 function rotationOffset(targetPiece, targetFace){
 	let tmpPiece = targetPiece;
 	let endResult = 0;
@@ -937,35 +956,6 @@ function getValue(what){
 	else{
 		error();
 	}
-}
-function removeRot(){
-	let tmp = [];
-	let currRot = undefined;
-	for(let i=0; i<solution.length; i++){
-		if(["x", "y", "z"].includes(base(solution[i]))){
-			if(currRot == undefined){
-				currRot = solution[i];
-			}
-			else{
-				currRot = undefined;
-			}
-		}
-		else{
-			if(currRot == undefined){
-				tmp.push(solution[i]);
-			}
-			else if(currRot == "y"){
-				tmp.push(Y[base(solution[i])]+getValue(solution[i]));
-			}
-			else if(currRot == "y2"){
-				tmp.push(Y[Y[base(solution[i])]]+getValue(solution[i]));
-			}
-			else if(currRot == "yi"){
-				tmp.push(Y[Y[Y[base(solution[i])]]]+getValue(solution[i]));
-			}
-		}
-	}
-	return(tmp);
 }
 /************************************************************************Animations*******************************************************************/
 ctx = c.getContext("2d", {willReadFrequently: true});
@@ -1420,12 +1410,19 @@ function doMiddle(){
 			}
 		}
 		if(unsolved.length>2){
-			solution.push(getFace(unsolved[0]));
-			scrCube.doMove(getFace(unsolved[0]));
+			let toUndo = [];
+			let focusOn = originalPos(unsolved[0]);
+			while(!pieceIn(locatePiece(focusOn), U)){
+				solution.push(getFace(unsolved[0]));
+				scrCube.doMove(getFace(unsolved[0]));
+				toUndo.push(getFace(unsolved[0]));
+			}
 			solution.push("U");
 			scrCube.doMove("U");
-			solution.push(getFace(unsolved[0]) + "i");
-			scrCube.doMove(getFace(unsolved[0]) + "i");
+			for(let k of undo(toUndo)){
+				solution.push(k);
+				scrCube.doMove(k);
+			}
 		}
 	}
 }
@@ -1448,6 +1445,9 @@ function doTop(){
 			scrCube.doMove("e");
 			tmp.push("e");
 		}
+	}
+	else{
+		mOffset = 0;
 	}
 	while(topOriented() == false){
 		if(scrCube[23] == "o"){
@@ -1474,6 +1474,7 @@ function doTop(){
 			solution.push("Ri");
 		}
 	}
+	console.log(scrCube.join(""));
 	if(!getColour(23).includes("o")){
 		if(scrCube[1]+scrCube[5]+scrCube[7]+scrCube[3] == "oooo"){
 			if(topPermutated() != 4){
@@ -1542,7 +1543,10 @@ function doTop(){
 		}
 	}
 	if(scrCube[23] == "o"){
+		console.log("Hi");
 		rotateUntil("U", 0, 3);
+		console.log("Hi");
+		console.log(topPermutated());
 		if(topPermutated() == 4){
 			return;
 		}
@@ -1561,15 +1565,24 @@ function doTop(){
 			}
 		}
 		else if(topPermutated() == 0){
+			console.log("hi");
+			console.log(scrCube.join(""));
 			let offset = 1;
 			let targetOffset;
 			let tmpa = 0;
 			let targets = [];
 			let currentPos = 23;
+			console.log(mOffset);
 			while(targets.length<4){
-				currentPos = originalPos(currentPos);
+				if(mOffset == 0){
+					currentPos = originalPos(currentPos);
+				}
+				else{
+					currentPos = testMove("U"+newerVal[4-mOffset], originalPos(currentPos));
+				}
 				targets.push(conversion.indexOf(currentPos));
 			}
+			console.log(targets);
 			for(let i=0; i<3; i++){
 				targetOffset = targets[i];
 				while(offset != targetOffset){
@@ -1606,6 +1619,7 @@ function doTop(){
 	}
 	else if(scrCube[30] == "o"){
 		rotateUntil("U", 1, 3);
+		console.log(topPermutated());
 		if(topPermutated() == 4){
 			return;
 		}
@@ -1630,7 +1644,12 @@ function doTop(){
 			let targets = [];
 			let currentPos = 30;
 			while(targets.length<4){
-				currentPos = originalPos(currentPos);
+				if(mOffset == 0){
+					currentPos = originalPos(currentPos);
+				}
+				else{
+					currentPos = testMove("U"+newerVal[4-mOffset], originalPos(currentPos));
+				}
 				targets.push(conversion.indexOf(currentPos));
 			}
 			for(let i=0; i<3; i++){
@@ -1698,8 +1717,8 @@ function doTop(){
 	}
 	function topPermutated(){
 		let correct = 0;
-		for(let i of U){
-			if((getType(i) == "e") && checkIfSolved(i)){
+		for(let i of [10, 19, 28, 37]){
+			if((scrCube[i] == scrCube[i+3]) && (scrCube[pair(i)] == "o")){
 				correct++;
 			}
 		}
@@ -1724,6 +1743,7 @@ function doTop(){
 				scrCube.doMove(face);
 				solution.push(face);
 				osdif++;
+				console.log(osdif);
 				if(osdif>=4){
 					break;
 				}
@@ -1734,7 +1754,7 @@ function doTop(){
 					scrCube.doMove(face);
 					solution.push(face);
 					osdif++;
-					if((osdif>=4) && (topPermutated()==0) && (scrCube[(piece == 0) ? 5 : 7] == "o")){
+					if((osdif>=4) && (topPermutated()==0)){
 						break;
 					}
 				}
@@ -1742,7 +1762,7 @@ function doTop(){
 		}
 		else if(condition == 4){
 			let firstPos = originalPos(originalPos((piece==5) ? 23 : 30));
-			while(locatePiece(firstPos) != piece){
+			while(locatePiece(firstPos) != conversion[(conversion.indexOf(piece)+mOffset)%4]){
 				scrCube.doMove(face);
 				solution.push(face);
 			}
