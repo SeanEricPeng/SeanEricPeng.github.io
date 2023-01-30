@@ -135,6 +135,12 @@ function solve(doAll = true){
 		else if(scrCube.join("") == "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr"){
 			alert("Mix it up first.");
 		}
+		else if(checkCornerTwisted()){
+			alert("A corner is twisted");
+		}
+		else if(checkEdgeTwisted()){
+			alert("An edge is twisted");
+		}
 		else{
 			vid.pause();
 			cancelAnimationFrame(request);
@@ -195,12 +201,26 @@ function testSeveral(amount){
 	console.log = function(){}
 	let soFar = 0;
 	let startTime = Date.now();
+	let minimum;
+	let maximum = 0;
+	let over100 = 0;
+	let temp;
 	for(let i=0; i<amount; i++){
-		soFar += randomScramble(false);
+		temp = randomScramble(false);
+		soFar += temp;
+		if((i==0) || (temp<minimum)){
+			minimum = temp;
+		}
+		if(temp>maximum){
+			maximum = temp;
+		}
+		if(temp>100){
+			over100++;
+		}
 	}
 	let endTime = Date.now()
 	console.log = theConsole;
-	console.log({"Average moves": soFar/amount, "Average time (ms)": (endTime-startTime)/amount, "Total time (ms)": endTime-startTime});
+	console.log({"Max": maximum, "Min": minimum, "Percent over 100 moves": over100/amount, "Average moves": soFar/amount, "Average time (ms)": (endTime-startTime)/amount, "Total time (ms)": endTime-startTime});
 }
 function error(){
 	throw "hi";
@@ -216,11 +236,9 @@ function checkPosition(piece){
 }
 function checkValidity(){
 	if(scrCube.length == 54){
-		return(true);
+		return true;
 	}
-	else{
-		return(false);
-	};
+	return false;
 }
 function findPiece(piece, arr = scrCube){
 	if(piece.length == 2){
@@ -423,6 +441,24 @@ function getSolutionc(){
 	}
 	console.log(solutionc);
 }*/
+function checkCornerTwisted(){
+	let twists = 0;
+	for(let i of firstCorners){
+		twists += rotationOffset(locatePiece(i), U);
+	}
+	twists %= 3;
+	return twists!=0;
+}
+function checkEdgeTwisted(){
+	let twists = 0;
+	for(let i of firstEdges){
+		if(firstEdges.includes(originalPos(i))){
+			twists++;
+		}
+	}
+	twists %= 2;
+	return twists!=0;
+}
 /*****************************************************************************************************************************************************/
 function turn(turntd){
 	solution.push(turntd);
