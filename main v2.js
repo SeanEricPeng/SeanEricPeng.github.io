@@ -176,7 +176,6 @@ function solve(doAll = true){
 				vid.src = "./Anims/"+solution[0]+".mp4";
 				vid.load();
 				vid.play();
-				draw(turnNo);
 				document.getElementById("progress").style.display = "block";
 				document.getElementById("otherStuff").style.display = "block";
 			}
@@ -999,8 +998,10 @@ ctx.imageSmoothingEnabled = false;
 vid.addEventListener("play", function(){
 	bar.style.width = (turnNo/solution.length)*100+"%";
 	progress.innerText = Math.round((turnNo/solution.length)*100)+"%";
+	request = requestAnimationFrame(draw);
 });
 vid.addEventListener("ended", function(){
+	cancelAnimationFrame(request);
 	if(turnNo>=solution.length-1){
 		bar.style.width = "100%";
 		bar.style.borderRadius = "10px";
@@ -1008,13 +1009,9 @@ vid.addEventListener("ended", function(){
 		console.log("done");
 	}
 	else{
-		cancelAnimationFrame(request);
-		vid.src = "./Anims/"+solution[turnNo+1]+".mp4";
 		turnNo++;
-		vid.onloadeddata = function(){
-			vid.play();
-			vid.addEventListener("play", function(){setTimeout(draw, 50)}, {once: true});
-		}
+		vid.src = "./Anims/"+solution[turnNo]+".mp4";
+		vid.play();
 	}
 });
 function pause(){
@@ -1066,10 +1063,15 @@ function goToEnd(){
 	vid.dispatchEvent(ended);
 }
 function draw(){
-	ctx.drawImage(vid, 0, 0, 500, 500);
-	bob = ctx.getImageData(0, 0, 500, 500);
-	edit();
-	request = requestAnimationFrame(draw);
+	if(!vid.paused && !vid.ended){
+		if(vid.readyState == 4){
+			ctx.drawImage(vid, 0, 0, 500, 500);
+			bob = ctx.getImageData(0, 0, 500, 500);
+			edit();
+		}
+		request = requestAnimationFrame(draw);
+	}
+	return;
 }
 function updateSpeed(hi){
 	vid.defaultPlaybackRate = hi.value;
@@ -1579,9 +1581,7 @@ function doTop(){
 		}
 	}
 	if(scrCube[23] == "o"){
-		console.log("Hi");
 		rotateUntil("U", 0, 3);
-		console.log("Hi");
 		console.log(topPermutated());
 		if(topPermutated() == 4){
 			return;
