@@ -145,12 +145,11 @@ function solve(doAll = true){
 			vid.pause();
 			cancelAnimationFrame(request);
 			turnNo = 0;
-			scrCube[4] = "o";
-			scrCube[13] = "g";
-			scrCube[22] = "w";
-			scrCube[31] = "b";
-			scrCube[40] = "y";
-			scrCube[49] = "r";
+			let fix = false;
+			if(scrCube[4]+scrCube[13]+scrCube[22]+scrCube[31]+scrCube[40]+scrCube[49] != "ogwbyr"){
+				fixColours();
+				fix = true;
+			}
 			console.log(scrCube);
 			document.getElementById("yay").style.display = "none";
 			solution = [];
@@ -176,6 +175,7 @@ function solve(doAll = true){
 				vid.src = "./Anims/"+solution[0]+".mp4";
 				vid.load();
 				vid.play();
+				requestAnimationFrame(thenPause);
 				document.getElementById("progress").style.display = "block";
 				document.getElementById("otherStuff").style.display = "block";
 			}
@@ -457,6 +457,23 @@ function checkEdgeTwisted(){
 	}
 	twists %= 2;
 	return twists!=0;
+}
+function fixColours(){
+	let colourFix = {[scrCube[4]]: "o", [scrCube[13]]: "g", [scrCube[22]]: "w", [scrCube[31]]: "b", [scrCube[40]]: "y", [scrCube[49]]: "r"};
+	for(let i=0; i<scrCube.length; i++){
+		scrCube[i] = colourFix[scrCube[i]];
+	}
+	console.log(scrCube.join(""));
+}
+function thenPause(){
+	if(vid.currentTime>0.1){
+		vid.pause();
+		vid.currentTime = 0;
+		return;
+	}
+	else{
+		requestAnimationFrame(thenPause);
+	}
 }
 /*****************************************************************************************************************************************************/
 function turn(turntd){
@@ -1003,10 +1020,20 @@ vid.addEventListener("play", function(){
 vid.addEventListener("ended", function(){
 	cancelAnimationFrame(request);
 	if(turnNo>=solution.length-1){
-		bar.style.width = "100%";
-		bar.style.borderRadius = "10px";
-		progress.innerText = "DONE!";
-		console.log("done");
+		if(turnNo>=solution.length){
+			return;
+		}
+		else{
+			bar.style.width = "100%";
+			bar.style.borderRadius = "10px";
+			progress.innerText = "DONE!";
+			console.log("done");
+			vid.src = "./Anims/"+solution[turnNo]+".mp4";
+			vid.play();
+			turnNo++;
+			request = requestAnimationFrame(draw);
+			requestAnimationFrame(thenPause);
+		}
 	}
 	else{
 		turnNo++;
@@ -1014,6 +1041,11 @@ vid.addEventListener("ended", function(){
 		vid.play();
 	}
 });
+window.addEventListener("keydown", function(e){
+	if("ogwbyr".includes(e.key)){
+		currColour = e.key;
+	}
+})
 function pause(){
 	if(vid.paused || vid.ended){
 		vid.play();
@@ -1030,20 +1062,19 @@ function goBack(){
 	vid.currentTime = 0;
 	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
-	if(oppositeofplaying == true){
-		vid.addEventListener("play", function(){
-			vid.pause();
-		}, {once: true});
+	if(oppositeofplaying){
+		requestAnimationFrame(thenPause);
 	}
 }
 function goForwards(){
+	if(turnNo >= allStates.length-1){
+		return;
+	}
 	vid.currentTime = 0;
 	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
 	if(oppositeofplaying == true){
-		vid.addEventListener("play", function(){
-			vid.pause();
-		}, {once: true});
+		requestAnimationFrame(thenPause);
 	}
 }
 function goToStart(){
@@ -1052,9 +1083,7 @@ function goToStart(){
 	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
 	if(oppositeofplaying == true){
-		vid.addEventListener("play", function(){
-			vid.pause();
-		}, {once: true});
+		requestAnimationFrame(thenPause);
 	}
 }
 function goToEnd(){
@@ -1174,9 +1203,6 @@ for(let i=0; i<6; i++){
 			otherThingy.setAttribute("class", target[i*9 + j*3 + k]);
 			otherThingy.id = i*9 + j*3 + k;
 			otherThingy.setAttribute("onclick", "updateColour(this)");
-			if(centers.includes(i*9 + j*3 + k)){
-				otherThingy.removeAttribute("onclick");
-			}
 			thingy.appendChild(otherThingy);
 		}
 	}
@@ -1224,12 +1250,7 @@ function updateGrid(){
 			qwerty[i] = " ";
 			inputT.value = qwerty.join("");
 		}
-		if(!centers.includes(i)){
-			document.getElementById(i.toString()).setAttribute("class", inputT.value[i]);
-		}
-		else{
-			inputT.value[i] = coloursb[centers.indexOf(i)];
-		}
+		document.getElementById(i.toString()).setAttribute("class", inputT.value[i]);
 	};
 	result = getAmount();
 	for(let i=0; i<6; i++){
