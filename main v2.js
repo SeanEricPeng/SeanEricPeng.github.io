@@ -5,17 +5,14 @@ console.log("owroobbrowwybgygobogwowrrwrbrgybwbgoybgryygorwgygrywby");
 console.log("wbgyooybboggggwwyoorwgwbwgyryyybrrwbrwbwyrooggobrrorby");
 console.log("yrwbobwybgwowgoboygroywgborwygybrwrgrwrbygybrowbgrgyoo");
 console.log("rgwwoogwrborbggyrwwrbywgogowyoobbgbogrywyoyyrbwyyrrgbb");
-inputT = document.getElementById("input-text");
-inputG = document.getElementById("input-grid");
-allInputs = document.getElementById("inputs");
-target = "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr".split("");
+var inputT = document.getElementById("input-text");
+var target = "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr".split("");
 inputT.value = "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr";
-scrCube = [];
-cube = [];
-solution = [];
-inputType = 0;
-done = "";
-turnValues = ["", "2", "i"];
+var scrCube = [];
+var solution = [];
+var inputType = 0;
+var done = "";
+var turnValues = ["", "2", "i"];
 const theConsole = console.log;
 var allStates;
 var currColour = "o";
@@ -52,7 +49,7 @@ var corners = [
 	[53, 35, 42],
 	[51, 44, 15]
 ];
-centers = [4, 13, 22, 31, 40, 49];
+var centers = [4, 13, 22, 31, 40, 49];
 var firstCorners = [0, 2, 8, 6, 45, 47, 53, 51];
 var secondCorners = [9, 36, 27, 18, 17, 26, 35, 44];
 var thirdCorners = [38, 29, 20, 11, 24, 33, 42, 15];
@@ -81,23 +78,27 @@ var Y = {
 	"B": "L",
 	"D": "D"
 };
+let parta = document.getElementById("parta");
+let partb = document.getElementById("partb");
 var vid = document.getElementById("vid");
 var c = document.getElementById("c");
 var cb = document.getElementById("cb");
+var tada = document.getElementById("tada");
 var bob;
-var request;
+var request = 0;
 var gridel = document.getElementById("grid");
-ended = new Event("ended");
-orange = [255, 165, 0];
-green = [0, 255, 0];
-white = [255, 255, 255];
-blue = [0, 0, 255];
-yellow = [255, 255, 0];
-red = [255, 0, 0];
-turnNo = 0;
-colours = {"o": orange, "g": green, "w": white, "b": blue, "y": yellow, "r": red};
-coloursb = ["o", "g", "w", "b", "y", "r"];
-cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
+var ended = new Event("ended");
+var orange = [255, 165, 0];
+var green = [0, 255, 0];
+var white = [255, 255, 255];
+var blue = [0, 0, 255];
+var yellow = [255, 255, 0];
+var red = [255, 0, 0];
+var turnNo = 0;
+var colours = {"o": orange, "g": green, "w": white, "b": blue, "y": yellow, "r": red};
+var coloursb = ["o", "g", "w", "b", "y", "r"];
+var cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
+var requestb = 0;
 function allbtwn(numa, numb){
 	let wqr = [];
 	for(let i=numa; i<=numb; i++){
@@ -132,26 +133,24 @@ function solve(doAll = true){
 		else if(getAmount().join("") != "999999"){
 			alert("There should be 9 of each colour in total! Please try again.");
 		}
-		else if(scrCube.join("") == "ooooooooogggggggggwwwwwwwwwbbbbbbbbbyyyyyyyyyrrrrrrrrr"){
+		if(scrCube[4]+scrCube[13]+scrCube[22]+scrCube[31]+scrCube[40]+scrCube[49] != "ogwbyr"){
+			fixColours();
+		}
+		if(scrCube.join("") == target.join("")){
 			alert("Mix it up first.");
 		}
 		else if(checkCornerTwisted()){
-			alert("A corner is twisted");
+			alert("A corner is twisted.");
 		}
 		else if(checkEdgeTwisted()){
-			alert("An edge is twisted");
+			alert("An edge is twisted.");
 		}
 		else{
 			vid.pause();
 			cancelAnimationFrame(request);
+			cancelAnimationFrame(requestb);
 			turnNo = 0;
-			let fix = false;
-			if(scrCube[4]+scrCube[13]+scrCube[22]+scrCube[31]+scrCube[40]+scrCube[49] != "ogwbyr"){
-				fixColours();
-				fix = true;
-			}
 			console.log(scrCube);
-			document.getElementById("yay").style.display = "none";
 			solution = [];
 			doCross();
 			console.log("m");
@@ -164,20 +163,20 @@ function solve(doAll = true){
 			corners2();
 			solution = simplify(solution);
 			if(doAll){
-				done = solution.join(" ").replace(/i/g, "'");
+				done = solution.join(" ").replace(/i/g, "'").split(" ");
 				console.log(done);
-				document.getElementById("tada").innerText = done;
-				document.getElementById("yay").style.display = "block";
+				parta.style.display = "none";
+				partb.style.display = "grid";
+				resize();
+				tada.innerHTML = done[0];
 				console.log("Now solved in "+solution.length+" moves");
 				getAllColours();
-				allInputs.style.display = "none";
 				cb.style.display = "block";
 				vid.src = "./Anims/"+solution[0]+".mp4";
 				vid.load();
 				vid.play();
 				requestAnimationFrame(thenPause);
-				document.getElementById("progress").style.display = "block";
-				document.getElementById("otherStuff").style.display = "block";
+				document.getElementById("top").style.display = "none";
 			}
 			else{
 				return solution.length;
@@ -469,10 +468,18 @@ function thenPause(){
 	if(vid.currentTime>0.1){
 		vid.pause();
 		vid.currentTime = 0;
-		return;
+		requestAnimationFrame(function readyNow(){
+			if(vid.readyState==4){
+				draw(true);
+				return;
+			}
+			else{
+				requestAnimationFrame(readyNow);
+			}
+		})
 	}
 	else{
-		requestAnimationFrame(thenPause);
+		requestb = requestAnimationFrame(thenPause);
 	}
 }
 /*****************************************************************************************************************************************************/
@@ -1013,9 +1020,16 @@ function getValue(what){
 ctx = c.getContext("2d", {willReadFrequently: true});
 ctx.imageSmoothingEnabled = false;
 vid.addEventListener("play", function(){
-	bar.style.width = (turnNo/solution.length)*100+"%";
-	progress.innerText = Math.round((turnNo/solution.length)*100)+"%";
-	request = requestAnimationFrame(draw);
+	if(turnNo<=solution.length-1){
+		tada.innerHTML = done[turnNo];
+		bar.style.width = (turnNo/solution.length)*100+"%";
+		progress.innerText = Math.round((turnNo/solution.length)*100)+"%";
+		request = requestAnimationFrame(draw);
+	}
+	else{
+		tada.innerHTML = "&#128558;";
+		requestb = thenPause();
+	}
 });
 vid.addEventListener("ended", function(){
 	cancelAnimationFrame(request);
@@ -1032,7 +1046,7 @@ vid.addEventListener("ended", function(){
 			vid.play();
 			turnNo++;
 			request = requestAnimationFrame(draw);
-			requestAnimationFrame(thenPause);
+			requestb = requestAnimationFrame(thenPause);
 		}
 	}
 	else{
@@ -1063,7 +1077,8 @@ function goBack(){
 	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
 	if(oppositeofplaying){
-		requestAnimationFrame(thenPause);
+		cancelAnimationFrame(requestb);
+		requestb = requestAnimationFrame(thenPause);
 	}
 }
 function goForwards(){
@@ -1074,25 +1089,24 @@ function goForwards(){
 	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
 	if(oppositeofplaying == true){
-		requestAnimationFrame(thenPause);
+		cancelAnimationFrame(requestb);
+		requestb = requestAnimationFrame(thenPause);
 	}
 }
 function goToStart(){
 	turnNo = -1;
 	vid.currentTime = 0;
-	let oppositeofplaying = vid.paused;
 	vid.dispatchEvent(ended);
-	if(oppositeofplaying == true){
-		requestAnimationFrame(thenPause);
-	}
+	cancelAnimationFrame(requestb);
+	requestb = requestAnimationFrame(thenPause);
 }
 function goToEnd(){
-	turnNo = solution.length-2;
+	turnNo = solution.length-1;
 	vid.currentTime = 0;
 	vid.dispatchEvent(ended);
 }
-function draw(){
-	if(!vid.paused && !vid.ended){
+function draw(exception){
+	if((!vid.paused && !vid.ended) || (exception===true)){
 		if(vid.readyState == 4){
 			ctx.drawImage(vid, 0, 0, 500, 500);
 			bob = ctx.getImageData(0, 0, 500, 500);
@@ -1267,74 +1281,26 @@ inputT.addEventListener("input", updateGrid);
 var palette = document.getElementById("palette");
 var palette2 = document.getElementById("palette2");
 function resize(){
-	if((window.innerWidth/4*3)/(window.innerHeight-200) > 2){
-		gridel.style.height = "100%";
-		gridel.style.width = ((window.innerHeight-200)*4/3)-8+"px";
-		palette.style.display = "table";
-		palette2.style.display = "none";
-		stats.style.fontSize = "1.5vw";
-		stats.style.width = "auto";
-		stats.style.display = "block";
-		palette.style.width = inputG.clientWidth - (gridel.clientWidth + stats.clientWidth + 5) + "px";
-		palette.style.height = "100%";
-		console.log("a");
-	}
-	else if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 0.6){
-		if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 2 && (((window.innerHeight-200)/3)/((window.innerWidth-16)/4)>1.9)){
-			gridel.style.width = "100%";
-			gridel.style.height = gridel.clientWidth * 0.75 + "px";
-			palette.style.display = "none";
-			palette2.style.display = "table";
-			stats.style.display = "block";
-			stats.style.fontSize = "3vw";
-			stats.style.height = "auto";
-			stats.style.width = "100vw";
-			palette2.style.width = "100vw";
-			palette2.style.height = inputG.clientHeight - (gridel.clientHeight + stats.clientHeight + 5) + "px";
-			console.log("b");
-		}
-		else if(((window.innerHeight-200)/3)/((window.innerWidth-16)/4) > 1){
-			console.log("c");
-			gridel.style.width = "100%";
-			gridel.style.height = gridel.clientWidth * 0.75 + "px";
-			palette.style.display = "table";
-			palette2.style.display = "none";
-			stats.style.display = "block";
-			stats.style.fontSize = "4vw";
-			stats.style.height = "auto";
-			stats.style.width = "auto";
-			palette.style.width = gridel.clientWidth - (stats.clientWidth+5) + "px";
-			palette.style.height = stats.clientHeight + "px";
-		}
-		else{
-			gridel.style.height = "100%";
-			gridel.style.width = gridel.clientHeight * 4/3 + "px";
-			if(gridel.style.height * 4/3 > window.innerWidth){
-				console.log("hi");
-			}
-			palette.style.display = "table";
-			palette2.style.display = "none";
-			palette.style.width = inputG.clientWidth - (gridel.clientWidth+5) + "px";
-			stats.style.fontSize = "2.5vw";
-			stats.style.height = "auto";
-			palette.style.height = "100%";
-			stats.style.display = "none";
-			console.log("d");
-		};
+	if(innerWidth/innerHeight < 1.5){
+		gridel.style.width = "100%";
+		gridel.style.height = gridel.clientWidth*(3/4)+"px";
 	}
 	else{
 		gridel.style.height = "100%";
-		gridel.style.width = gridel.clientHeight * 4/3+"px";
-		palette.style.display = "none";
-		stats.style.fontSize = "2.5vw";
-		stats.style.height = "auto";
-		stats.style.display = "block";
-		stats.style.width = "auto";
-		palette2.style.height = inputG.clientHeight - stats.clientHeight + "px";
-		palette2.style.display = "table";
-		palette2.style.width = stats.clientWidth + "px";
-		console.log("e");
+		gridel.style.width = gridel.clientHeight*(4/3)+"px";
 	}
+	if((innerWidth/innerHeight < 0.9) && (innerWidth/innerHeight > 0.4)){
+		stats.style.height = "100%";
+		stats.style.fontSize = stats.offsetHeight/14+"px";
+		stats.style.width = stats.offsetHeight/14*17+"px";
+	}
+	else{
+		stats.style.width = "100%";
+		stats.style.fontSize = stats.offsetWidth/17+"px";
+		stats.style.height = stats.offsetWidth/17*13+"px";
+	}
+	tada.style.height = "100%";
+	tada.style.fontSize = Math.min(tada.clientHeight, tada.clientWidth*0.8)+"px";
 }
 window.onresize = resize;
 window.onload = resize;
@@ -1622,7 +1588,6 @@ function doTop(){
 			}
 		}
 		else if(topPermutated() == 0){
-			console.log("hi");
 			console.log(scrCube.join(""));
 			let offset = 1;
 			let targetOffset;
