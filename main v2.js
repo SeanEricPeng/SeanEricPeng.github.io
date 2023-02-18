@@ -101,7 +101,7 @@ var cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
 var requestb = 0;
 document.addEventListener("click", function(){
 	document.documentElement.requestFullscreen();
-}, {once: true});
+});
 function allbtwn(numa, numb){
 	let wqr = [];
 	for(let i=numa; i<=numb; i++){
