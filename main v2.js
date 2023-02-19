@@ -131,10 +131,12 @@ function solve(doAll = true){
 	if(inputType == 0){
 		scrCube = inputT.value.split("");
 		if(checkValidity() == false){
-			alert("There should be exactly 54 characters in the top.")
+			alert("There should be exactly 54 characters in the top.");
+			return;
 		}
 		else if(getAmount().join("") != "999999"){
 			alert("There should be 9 of each colour in total! Please try again.");
+			return;
 		}
 		if(scrCube[4]+scrCube[13]+scrCube[22]+scrCube[31]+scrCube[40]+scrCube[49] != "ogwbyr"){
 			fixColours();
@@ -142,11 +144,20 @@ function solve(doAll = true){
 		if(scrCube.join("") == target.join("")){
 			alert("Mix it up first.");
 		}
+		else if(!checkCornersExist()){
+			alert("There should be exactly one of each corner on the cube.");
+		}
+		else if(!checkEdgesExist()){
+			alert("There should be exactly one of each edge on the cube.");
+		}
 		else if(checkCornerTwisted()){
 			alert("A corner is twisted.");
 		}
 		else if(checkEdgeTwisted()){
 			alert("An edge is twisted.");
+		}
+		else if(checkEdgeParity()!=checkCornerParity()){
+			alert("2 corners need swapping.");
 		}
 		else{
 			vid.pause();
@@ -197,6 +208,67 @@ function randomScramble(doAll = true){
 	}
 	inputT.value = tmpd.join("");
 	return solve(doAll);
+}
+function checkCornersExist(){
+	for(let i of firstCorners){
+		try{
+			locatePiece(i);
+		}
+		catch(e){
+			console.log(e);
+			return false;
+		}
+	}
+	return true;
+}
+function checkEdgesExist(){
+	for(let i of firstEdges){
+		try{
+			locatePiece(i);
+		}
+		catch(e){
+			return false;
+		}
+	}
+	return true;
+}
+function checkEdgeParity(){
+	let skip = [];
+	let currentLoop = 0;
+	let here;
+	for(let i of firstEdges){
+		if(skip.includes(i) || skip.includes(pair(i))){
+			continue;
+		}
+		here = originalPos(i);
+		skip.push(here);
+		while(![i, pair(i)].includes(here)){
+			here = originalPos(here);
+			skip.push(here);
+			currentLoop++;
+		}
+	}
+	return (currentLoop%2)==0;
+}
+function checkCornerParity(){
+	let skip = [];
+	let currentLoop = 0;
+	let here;
+	for(let i of firstCorners){
+		if(skip.includes(i) || skip.includes(second(i)) || skip.includes(third(i))){
+			continue;
+		}
+		here = originalPos(i);
+		skip.push(here);
+		console.log(i);
+		while(![i, second(i), third(i)].includes(here)){
+			console.log(here);
+			here = originalPos(here);
+			skip.push(here);
+			currentLoop++;
+		}
+	}
+	return (currentLoop%2)==0;
 }
 function testSeveral(amount){
 	console.log = function(){}
