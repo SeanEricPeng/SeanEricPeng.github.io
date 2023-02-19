@@ -82,7 +82,9 @@
 				<input type="range" min="0.1" max="10" value="1" id="speed" step="0.1" onclick="updateSpeed(this)">
 			</div>
 			<canvas width="500" height="500" id="c" style="display: none"></canvas>
-			<canvas width="500" height="500" id="cb"></canvas>
+			<div id="cbcontainer">
+				<canvas width="500" height="500" id="cb"></canvas>
+			</div>
 			<div id="progress"><span id="progressval"></span><div id="bar"></div></div>
 			<video width="500" height="500" style="display: none;" controls id="vid" src="./Anims/Fi.mp4" muted="muted">
 			</video>
