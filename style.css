@@ -20,6 +20,14 @@ video{
 	width: 500px;
 	height: 500px;
 }
+#speed{
+	-webkit-appearance: none;
+	background: transparent;
+	width: 100%;
+	height: 5vh;
+	grid-column: 1/-1;
+	display: block;
+}
 #speed::-webkit-slider-runnable-track{
 	border: 1px solid black;
 	background-color: lightblue;
@@ -30,8 +38,9 @@ video{
 	-webkit-appearance: none;
 	background-color: orange;
 	height: 100%;
+	width: auto;
 	aspect-ratio: 3/1;
-	border-radius: calc(50% / 3)/50%;
+	border-radius: 16.67% / 50%;
 }
 table{
 	border-spacing: 0px;
@@ -70,285 +79,125 @@ td{
 	transition-duration: 0.25s;
 	grid-column: 1/-1;
 }
+#controls div{
+	background-color: orange;
+	color: black;
+	border-radius: 2vh;
+	width: min(20vh, 100%);
+}
+#controls div img{
+	height: 100%;
+	width: 100%;
+}
+#controls{
+	height: 25vh;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto auto;
+	column-gap: 2%;
+	background-color: #444;
+	border-radius: 3vh;
+	justify-content: space-between;
+	justify-items: center;
+	grid-area: ctrl;
+}
+#cbcontainer{
+	display: flex;
+	position: relative;
+	grid-area: cbco;
+	align-items: center;
+}
+#yay{
+	width: 100%;
+	display: block;
+	grid-area: yay;
+	font-size: min(5vh, 3vw);
+	text-decoration: underline;
+	text-align: center;
+}
+#progress{
+	background-color: red;
+	z-index: 1;
+	height: 5vh;
+	grid-area: prog;
+	border-radius: 2.5vh;
+	position: relative;
+	width: 100%;
+}
+#progressval{
+	font-size: 4vh;
+	margin-left: 50%;
+	position: absolute;
+	transform: translate(-50%, 0);
+}
+#bar{
+	background-color: green;
+	width: 0%;
+	z-index: 2;
+	height: 100%;
+	border-radius: 2.5vh;
+	float: left;
+}
+#tada{
+	height: 100%;
+	width: 100%;
+	line-height: 104%;
+	overflow: hidden;
+	white-space: nowrap;
+	font-family: monospace;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#cb{
+	height: min(50vw, 100%);
+	aspect-ratio: 1/1;
+}
 @media (min-aspect-ratio: 15/10){
-	#controls div{
-		background-color: orange;
-		color: black;
-		border-radius: 2vh;
-		width: min(20vh, 100%);
-	}
-	#controls div img{
-		height: 100%;
-		width: 100%;
-	}
-	#speed{
-		-webkit-appearance: none;
-		background: transparent;
-		width: calc(100% - 4px);
-		height: 5vh;
-		grid-column: 1/-1;
-		display: block;
-	}
-	#controls{
-		grid-row: 3;
-		grid-column: 2;
-		height: 25vh;
-		width: 100%;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		grid-template-rows: auto auto;
-		column-gap: 2%;
-		background-color: #444;
-		border-radius: 3vh;
-		justify-content: space-between;
-		justify-items: center;
-	}
 	#partb{
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: min-content 1fr min-content min-content;
+		grid-template-areas: "yay yay" "cbco tada" "cbco ctrl" "prog prog";
 		column-gap: 5px;
 		row-gap: 5px;
 		height: 100vh;
 		width: 100vw;
 		justify-items: center;
 	}
-	#progress{
-		background-color: red;
-		z-index: 1;
-		height: 5vh;
-		grid-row: -2;
-		grid-column: 1/-1;
-		border-radius: 2.5vh;
-		position: relative;
-		width: 100%;
-	}
-	#bar{
-		background-color: green;
-		width: 0%;
-		z-index: 2;
-		height: 100%;
-		border-radius: 2.5vh;
-		float: left;
-	}
-	#progressval{
-		font-size: 4vh;
-		margin-left: 50%;
-		position: absolute;
-		transform: translate(-50%, 0);
-	}
-	#yay{
-		width: 100%;
-		display: block;
-		grid-column: 2;
-		grid-row: 1;
-		font-size: min(5vh, 3vw);
-		text-decoration: underline;
-		text-align: center;
-	}
-	#cb{
-		height: min(50vw, 100%);
-		grid-column: 1;
-		grid-row: 2/-2;
-	}
-	#tada{
-		grid-column: 2;
-		grid-row: 2;
-		height: 100%;
-		width: 100%;
-		line-height: 104%;
-		overflow: hidden;
-		white-space: nowrap;
-		font-family: monospace;
-		text-align: center;
-	}
 }
-@media (min-aspect-ratio: 1/2) and (max-aspect-ratio: 15/10){
-	#controls div{
-		background-color: orange;
-		color: black;
-		border-radius: 2vh;
-		width: min(20vh, 100%);
-	}
-	#controls div img{
-		height: 100%;
-		width: 100%;
-	}
-	#speed{
-		-webkit-appearance: none;
-		background: transparent;
-		width: calc(100% - 4px);
-		height: 5vh;
-		grid-column: 1/-1;
-		display: block;
-	}
+@media (min-aspect-ratio: 4/5) and (max-aspect-ratio: 15/10) and (not (aspect-ratio: 4/5)){
 	#controls{
 		grid-row: 3;
 		grid-column: 1/-1;
-		height: 25vh;
-		width: 100%;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		grid-template-rows: auto auto;
-		column-gap: 2%;
-		background-color: #444;
-		border-radius: 3vh;
-		justify-content: space-between;
-		justify-items: center;
 	}
 	#partb{
 		display: grid;
 		grid-template-columns: min-content 1fr;
 		grid-template-rows: min-content 1fr min-content min-content;
+		grid-template-areas: "yay yay" "cbco tada" "ctrl ctrl" "prog prog";
 		column-gap: 5px;
 		row-gap: 5px;
 		height: 100vh;
 		width: 100vw;
 	}
-	#progress{
-		background-color: red;
-		z-index: 1;
-		height: 5vh;
-		grid-row: -2;
-		grid-column: 1/-1;
-		border-radius: 2.5vh;
-		position: relative;
-		width: 100%;
-	}
-	#bar{
-		background-color: green;
-		width: 0%;
-		z-index: 2;
-		height: 100%;
-		border-radius: 2.5vh;
-		float: left;
-	}
-	#progressval{
-		font-size: 4vh;
-		margin-left: 50%;
-		position: absolute;
-		transform: translate(-50%, 0);
-	}
-	#yay{
-		width: 100%;
-		display: block;
-		grid-column: 1/-1;
-		grid-row: 1;
-		font-size: min(5vh, 7vw);
-		text-decoration: underline;
-		text-align: center;
-	}
-	#cb{
-		height: min(80vw, 100%);
-		grid-column: 1;
-		grid-row: 2;
-	}
-	#tada{
-		grid-column: 2;
-		grid-row: 2;
-		height: 100%;
-		width: 100%;
-		line-height: 104%;
-		overflow: hidden;
-		white-space: nowrap;
-		font-family: monospace;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
 }
-@media (max-aspect-ratio: 1/2){
-	#controls div{
-		background-color: orange;
-		color: black;
-		border-radius: 2vh;
-		width: min(20vh, 100%);
-	}
-	#controls div img{
-		height: 100%;
-		width: 100%;
-	}
-	#speed{
-		-webkit-appearance: none;
-		background: transparent;
-		width: calc(100% - 4px);
-		height: 5vh;
-		grid-column: 1/-1;
-		display: block;
-	}
-	#controls{
-		grid-row: 4;
-		grid-column: 1/;
-		height: 25vh;
-		width: 100%;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		grid-template-rows: auto auto;
-		column-gap: 2%;
-		background-color: #444;
-		border-radius: 3vh;
-		justify-content: space-between;
-		justify-items: center;
-	}
+@media (max-aspect-ratio: 4/5){
 	#partb{
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: min-content min-content 1fr min-content min-content;
+		grid-template-areas: "yay" "cbco" "tada" "ctrl" "prog";
 		column-gap: 5px;
 		row-gap: 5px;
 		height: 100vh;
 		width: 100vw;
 		justify-items: center;
 	}
-	#progress{
-		background-color: red;
-		z-index: 1;
-		height: 5vh;
-		grid-row: -2;
-		grid-column: 1;
-		border-radius: 2.5vh;
-		position: relative;
-		width: 100%;
-	}
-	#bar{
-		background-color: green;
-		width: 0%;
-		z-index: 2;
-		height: 100%;
-		border-radius: 2.5vh;
-		float: left;
-	}
-	#progressval{
-		font-size: 4vh;
-		margin-left: 50%;
-		position: absolute;
-		transform: translate(-50%, 0);
-	}
-	#yay{
-		width: 100%;
-		height: 100%;
-		display: block;
-		grid-column: 1;
-		grid-row: 1;
-		font-size: min(15vh, 7vw);
-		text-decoration: underline;
-		text-align: center;
-	}
 	#cb{
-		height: 100vw;
-		grid-column: 1;
-		grid-row: 2;
-	}
-	#tada{
-		grid-column: 1;
-		grid-row: 3;
-		height: 100%;
-		width: 100%;
-		line-height: 104%;
-		overflow: hidden;
-		white-space: nowrap;
-		font-family: monospace;
-		text-align: center;
+		height: min(100vw, 45vh);
+		aspect-ratio: 1/1;
 	}
 }
 @media (min-aspect-ratio: 19/10){
