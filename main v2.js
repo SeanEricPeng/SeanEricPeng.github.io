@@ -100,7 +100,12 @@ var coloursb = ["o", "g", "w", "b", "y", "r"];
 var cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
 var requestb = 0;
 document.addEventListener("click", function(){
-	document.documentElement.requestFullscreen();
+	if(document.documentElement.requestFullscreen){
+		document.documentElement.requestFullscreen();
+	}
+	else{
+		document.documentElement.webkitRequestFullscreen();
+	}
 });
 function allbtwn(numa, numb){
 	let wqr = [];
@@ -272,6 +277,7 @@ function checkCornerParity(){
 }
 function testSeveral(amount){
 	console.log = function(){}
+	let results = [];
 	let soFar = 0;
 	let startTime = Date.now();
 	let minimum;
@@ -281,6 +287,7 @@ function testSeveral(amount){
 	for(let i=0; i<amount; i++){
 		temp = randomScramble(false);
 		soFar += temp;
+		results.push(temp);
 		if((i==0) || (temp<minimum)){
 			minimum = temp;
 		}
@@ -294,6 +301,7 @@ function testSeveral(amount){
 	let endTime = Date.now()
 	console.log = theConsole;
 	console.log({"Max": maximum, "Min": minimum, "Percent over 100 moves": over100/amount, "Average moves": soFar/amount, "Average time (ms)": (endTime-startTime)/amount, "Total time (ms)": endTime-startTime});
+	return results;
 }
 function error(){
 	throw "hi";
