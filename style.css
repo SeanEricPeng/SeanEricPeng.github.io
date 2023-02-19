@@ -167,11 +167,7 @@ td{
 		justify-items: center;
 	}
 }
-@media (min-aspect-ratio: 4/5) and (max-aspect-ratio: 15/10) and (not (aspect-ratio: 4/5)){
-	#controls{
-		grid-row: 3;
-		grid-column: 1/-1;
-	}
+@media (min-aspect-ratio: 4/5) and (max-aspect-ratio: 15/10) and (not (aspect-ratio: 4/5)) and (not (aspect-ratio: 15/10)){
 	#partb{
 		display: grid;
 		grid-template-columns: min-content 1fr;
@@ -197,7 +193,6 @@ td{
 	}
 	#cb{
 		height: min(100vw, 45vh);
-		aspect-ratio: 1/1;
 	}
 }
 @media (min-aspect-ratio: 19/10){
