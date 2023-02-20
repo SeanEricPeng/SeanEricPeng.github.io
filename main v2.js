@@ -1191,15 +1191,9 @@ function goToEnd(){
 function draw(exception){
 	if((!vid.paused && !vid.ended) || (exception===true)){
 		if(vid.readyState == 4){
-			try{
-				ctx.drawImage(vid, 0, 0, 500, 500);
-				bob = ctx.getImageData(0, 0, 500, 500);
-				alert(bob);
-				edit();
-			}
-			catch(e){
-				alert(e.message);
-			}
+			ctx.drawImage(vid, 0, 0, 500, 500);
+			bob = ctx.getImageData(0, 0, 500, 500);
+			edit();
 		}
 		request = requestAnimationFrame(draw);
 	}
