@@ -1194,6 +1194,7 @@ function draw(exception){
 			try{
 				ctx.drawImage(vid, 0, 0, 500, 500);
 				bob = ctx.getImageData(0, 0, 500, 500);
+				alert(bob);
 				edit();
 			}
 			catch(e){
