@@ -153,6 +153,7 @@ td{
 #cb{
 	height: min(50vw, 100%);
 	aspect-ratio: 1/1;
+	border: 1px solid black;
 }
 @media (min-aspect-ratio: 15/10){
 	#partb{
@@ -173,8 +174,7 @@ td{
 		grid-template-columns: min-content 1fr;
 		grid-template-rows: min-content 1fr min-content min-content;
 		grid-template-areas: "yay yay" "cbco tada" "ctrl ctrl" "prog prog";
-		column-gap: 5px;
-		row-gap: 5px;
+		gap: 5px;
 		height: 100vh;
 		width: 100vw;
 	}
@@ -185,8 +185,7 @@ td{
 		grid-template-columns: 1fr;
 		grid-template-rows: min-content min-content 1fr min-content min-content;
 		grid-template-areas: "yay" "cbco" "tada" "ctrl" "prog";
-		column-gap: 5px;
-		row-gap: 5px;
+		gap: 5px;
 		height: 100vh;
 		width: 100vw;
 		justify-items: center;
@@ -198,8 +197,7 @@ td{
 @media (min-aspect-ratio: 19/10){
 	#parta{
 		display: grid;
-		row-gap: 5px;
-		column-gap: 5px;
+		gap: 5px;
 		grid-template-columns: min-content 1fr 1fr;
 		grid-template-rows: 8vh 4vh auto 7.5vh;
 		height: 100vh;
