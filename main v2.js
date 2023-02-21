@@ -1260,7 +1260,7 @@ function edit(){
 		if(bob.data[i]%4 == 3){
 			bob.data[i] = bob.data[i]+1;
 		};
-		if(bob.data[i] == 255){
+		if(bob.data[i] >= 250){
 			bob.data[i+3] = 0;
 		}
 		else{
@@ -1269,7 +1269,12 @@ function edit(){
 				console.log(thisColour);
 			}
 			else if(thisColour >= 0){
-				changeColour(i, colours[allStates[turnNo][thisColour]]);
+				try{			
+					changeColour(i, colours[allStates[turnNo][thisColour]]);
+				}
+				catch(e){
+					console.log([e.message, i, turnNo, thisColour])
+				}
 			}
 		}
 	}
