@@ -107,6 +107,10 @@ td{
 	position: relative;
 	grid-area: cbco;
 	align-items: center;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	justify-content: center;
 }
 #yay{
 	width: 100%;
@@ -151,7 +155,8 @@ td{
 	justify-content: center;
 }
 #cb{
-	height: min(50vw, 100%);
+	max-height: 100%;
+	max-width: 100%;
 	aspect-ratio: 1/1;
 }
 @media (min-aspect-ratio: 15/10){
@@ -170,7 +175,7 @@ td{
 @media (min-aspect-ratio: 4/5) and (max-aspect-ratio: 15/10) and (not (aspect-ratio: 4/5)) and (not (aspect-ratio: 15/10)){
 	#partb{
 		display: grid;
-		grid-template-columns: min-content 1fr;
+		grid-template-columns: auto auto;
 		grid-template-rows: min-content 1fr min-content min-content;
 		grid-template-areas: "yay yay" "cbco tada" "ctrl ctrl" "prog prog";
 		gap: 5px;
