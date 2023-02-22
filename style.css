@@ -116,7 +116,7 @@ td{
 	width: 100%;
 	display: block;
 	grid-area: yay;
-	font-size: min(5vh, 3vw);
+	font-size: min(5vh, 7vw);
 	text-decoration: underline;
 	text-align: center;
 }
