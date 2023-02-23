@@ -79,7 +79,7 @@
 				<div onclick="pause()"><image src="./Anims/playpause.png" draggable="false"></image></div>
 				<div onclick="goForwards()"><image src="./Anims/Forwards.png" draggable="false"></image></div>
 				<div onclick="goToEnd()"><image src="./Anims/End.png" draggable="false"></div>
-				<input type="range" min="0.1" max="10" value="1" id="speed" step="0.1" onclick="updateSpeed(this)">
+				<input type="range" min="0.1" max="10" value="1" id="speed" step="0.1" oninput="updateSpeed(this)">
 			</div>
 			<canvas width="500" height="500" id="c" style="display: none"></canvas>
 			<div id="cbcontainer">
