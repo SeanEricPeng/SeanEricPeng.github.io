@@ -69,15 +69,8 @@ td{
 }
 #input-text{
 	font-family: monospace;
-	grid-column: 1/-1;
 	font-size: 2.5vh;
-}
-#SOLVE{
-	border-radius: 40px;
-	background-color: lime;
-	font-size: min(6vh, 10vw);
-	transition-duration: 0.25s;
-	grid-column: 1/-1;
+	grid-area: input;
 }
 #controls div{
 	background-color: orange;
@@ -106,7 +99,6 @@ td{
 	display: flex;
 	position: relative;
 	grid-area: cbco;
-	align-items: stretch;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
@@ -181,6 +173,7 @@ td{
 		gap: 5px;
 		height: 100vh;
 		width: 100vw;
+		justify-items: center;
 	}
 }
 @media (max-aspect-ratio: 4/5){
@@ -198,41 +191,44 @@ td{
 		height: min(100vw, 45vh);
 	}
 }
+#grid{
+	height: 100%;
+	grid-area: grid;
+}
+#stats{
+	font-family: monospace;
+	height: 100%;
+	overflow: auto;
+	line-height: 100%;
+	text-align: left;
+	grid-area: stats;
+}
+#top{
+	font-size: 1.5vw;
+	height: min(8vh, 7.5vw);
+	grid-area: title;
+}
+#SOLVE{
+	border-radius: 40px;
+	background-color: lime;
+	font-size: min(6vh, 10vw);
+	transition-duration: 0.25s;
+	grid-area: solve;
+}
 @media (min-aspect-ratio: 19/10){
 	#parta{
 		display: grid;
 		gap: 5px;
 		grid-template-columns: min-content 1fr 1fr;
 		grid-template-rows: 8vh 4vh auto 7.5vh;
+		grid-template-areas: "title title title" "input input input" "grid stats palette" "solve solve solve";
 		height: 100vh;
-	}
-	#grid{
-		height: 100%;
-	}
-	#stats{
-		font-family: monospace;
-		height: 100%;
-		overflow: auto;
-		line-height: 100%;
-		text-align: left;
-	}
-	#top{
-		grid-column: 1/4;
-		font-size: 1.5vw;
-		height: min(8vh, 7.5vw);
-	}
-	#otherStuff{
-		float: left;
-		position: relative;
-		left: 50px; 
-		width: 40vw; 
-		height: 40vw;
-		display: none;
 	}
 	#palette{
 		display: table;
 		width: 100%;
 		height: auto;
+		grid-area: palette;
 	}
 	#palette2{
 		display: none;
@@ -241,109 +237,49 @@ td{
 @media (min-aspect-ratio: 15/10) and (max-aspect-ratio: 19/10){
 	#parta{
 		display: grid;
-		row-gap: 5px;
-		column-gap: 5px;
+		gap: 5px;
 		grid-template-columns: auto auto;
 		grid-template-rows: 8vh 4vh min-content auto 7.5vh;
+		grid-template-areas: "title title" "input input" "grid stats" "grid palette" "solve solve";
 		height: 100vh;
-	}
-	#grid{
-		height: 100%;
-		grid-row: 3 / 5;
 	}
 	#palette2{
 		display: table;
 		width: 100%;
 		height: auto;
-		grid-row: 4;
+		grid-area: palette;
 	}
 	#palette{
-		display: none;
-	}
-	#top{
-		grid-column: 1/4;
-		font-size: 1.5vw;
-		height: min(8vh, 7.5vw);
-	}
-	#stats{
-		font-family: monospace;
-		overflow: auto;
-		line-height: 100%;
-		font-size: 1.75vw;
-		text-align: left;
-		grid-row: 3;
-	}
-	#otherStuff{
-		float: left;
-		position: relative;
-		left: 50px; 
-		width: 40vw; 
-		height: 40vw;
 		display: none;
 	}
 }
 @media (min-aspect-ratio: 9/10) and (max-aspect-ratio: 15/10){
 	#parta{
 		display: grid;
-		row-gap: 5px;
-		column-gap: 5px;
+		gap: 5px;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 8vh 4vh min-content auto 7.5vh;
+		grid-template-areas: "title title" "input input" "grid stats" "palette palette" "solve solve";
 		height: 100vh;
-	}
-	#grid{
-		width: 100%;
-		grid-row: 3;
-		grid-column: 1/2;
 	}
 	#palette2{
 		display: table;
 		width: 100%;
 		height: auto;
-		grid-row: 4;
-		grid-column: 1/3;
+		grid-area: palette;
 	}
 	#palette{
-		display: none;
-	}
-	#top{
-		grid-column: 1/3;
-		font-size: 1.5vw;
-		height: min(8vh, 7.5vw);
-	}
-	#stats{
-		font-family: monospace;
-		height: 100%;
-		overflow: auto;
-		line-height: 100%;
-		font-size: 1.75vw;
-		text-align: left;
-		grid-row: 3 / 4;
-		grid-column: 2;
-		width: 100%;
-	}
-	#otherStuff{
-		float: left;
-		position: relative;
-		left: 50px; 
-		width: 40vw; 
-		height: 40vw;
 		display: none;
 	}
 }
 @media (min-aspect-ratio: 3/5) and (max-aspect-ratio: 9/10){
 	#parta{
 		display: grid;
-		row-gap: 5px;
-		column-gap: 5px;
+		gap: 5px;
 		grid-template-columns: auto auto;
 		grid-template-rows: 8vh 4vh min-content auto 7.5vh;
+		grid-template-areas: "title title" "input input" "grid grid" "stats palette" "solve solve";
 		height: 100vh;
-	}
-	#grid{
-		width: 100%;
-		grid-row: 3;
-		grid-column: 1/3;
 	}
 	#palette2{
 		display: none;
@@ -352,90 +288,38 @@ td{
 		display: table;
 		width: 100%;
 		height: auto;
-		grid-row: 4;
-		grid-column: 2;
-	}
-	#top{
-		grid-column: 1/3;
-		font-size: 1.5vw;
-		height: min(8vh, 7.5vw);
-	}
-	#stats{
-		font-family: monospace;
-		overflow: auto;
-		line-height: 100%;
-		font-size: 1.75vw;
-		text-align: left;
-		grid-row: 4;
-		grid-column: 1;
-		height: 100%;
-	}
-	#otherStuff{
-		float: left;
-		position: relative;
-		left: 50px; 
-		width: 40vw; 
-		height: 40vw;
-		display: none;
+		grid-area: palette;
 	}
 }
 @media (max-aspect-ratio: 3/5){
 	@media (min-aspect-ratio: 4/10){
 		#parta{
 			display: grid;
-			row-gap: 5px;
-			column-gap: 5px;
+			gap: 5px;
 			grid-template-columns: auto;
 			grid-template-rows: 8vh 4vh min-content 3fr 2fr 7.5vh;
+			grid-template-areas: "title" "input" "grid" "stats" "palette" "solve";
 			height: 100vh;
 		}
 	}
 	@media (max-aspect-ratio: 4/10){
 		#parta{
 			display: grid;
-			row-gap: 5px;
-			column-gap: 5px;
+			gap: 5px;
 			grid-template-columns: auto;
 			grid-template-rows: 8vh 4vh min-content min-content auto 7.5vh;
+			grid-template-areas: "title" "input" "grid" "stats" "palette" "solve";
 			height: 100vh;
 		}
-	}
-	#grid{
-		width: 100vw;
-		grid-row: 3;
-		grid-column: 1;
 	}
 	#palette2{
 		display: table;
 		width: 100%;
 		height: auto;
-		grid-row: 5;
-		grid-column: 1;
 		min-height: 10vh;
+		grid-area: palette;
 	}
 	#palette{
-		display: none;
-	}
-	#top{
-		grid-column: 1;
-		font-size: 1.5vw;
-		height: min(8vh, 7.5vw);
-	}
-	#stats{
-		font-family: monospace;
-		overflow: auto;
-		line-height: 100%;
-		font-size: 1.75vw;
-		text-align: left;
-		grid-row: 4;
-		grid-column: 1;
-	}
-	#otherStuff{
-		float: left;
-		position: relative;
-		left: 50px; 
-		width: 40vw; 
-		height: 40vw;
 		display: none;
 	}
 }
