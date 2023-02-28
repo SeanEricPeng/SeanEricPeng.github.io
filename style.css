@@ -64,6 +64,9 @@ table{
 .r{
 	background-color: red;
 }
+.undefined{
+	background-color: gray;
+}
 td{
 	border-radius: 10%;
 }
@@ -94,6 +97,10 @@ td{
 	justify-content: space-between;
 	justify-items: center;
 	grid-area: ctrl;
+}
+#orange, #green, #white, #blue, #yellow, #red{
+	background-image: black;
+	border-radius: calc(10% / 3);
 }
 #cbcontainer{
 	display: flex;
@@ -150,6 +157,7 @@ td{
 	max-height: 100%;
 	max-width: 100%;
 	aspect-ratio: 1/1;
+	background-image: radial-gradient(black, black, rgba(255, 255, 255, 0.3), transparent, transparent);
 }
 @media (min-aspect-ratio: 15/10){
 	#partb{
@@ -194,6 +202,7 @@ td{
 #grid{
 	height: 100%;
 	grid-area: grid;
+	background-image: radial-gradient(75% 50% at 37.5% 50%, black, transparent);
 }
 #stats{
 	font-family: monospace;
