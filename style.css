@@ -64,6 +64,13 @@ table{
 .r{
 	background-color: red;
 }
+.o, .g, .w, .b, .y, .r{
+	transition-duration: 200ms;
+	transition-property: filter;
+}
+.o:hover, .g:hover, .w:hover, .b:hover, .y:hover, .r:hover{
+	filter: brightness(80%);
+}
 .undefined{
 	background-color: gray;
 }
