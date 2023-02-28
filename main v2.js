@@ -1330,7 +1330,11 @@ function getAmount(){
 	return(result);
 }
 function setColour(hi){
-	currColour = hi.getAttribute("class");
+	for(let i of document.getElementsByClassName("p")){
+		i.style.border = "3px solid black";
+	}
+	currColour = hi.getAttribute("class")[0];
+	hi.style.border = "3px dashed black";
 }
 function updateText(){
 	let sdfsd = "";
