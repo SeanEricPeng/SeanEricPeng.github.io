@@ -64,11 +64,11 @@ table{
 .r{
 	background-color: red;
 }
-.o, .g, .w, .b, .y, .r{
+.o, .g, .w, .b, .y, .r, #controls div, #speed::-webkit-slider-thumb{
 	transition-duration: 200ms;
 	transition-property: filter;
 }
-.o:hover, .g:hover, .w:hover, .b:hover, .y:hover, .r:hover{
+.o:hover, .g:hover, .w:hover, .b:hover, .y:hover, .r:hover, #controls div:hover, #speed::-webkit-slider-thumb:hover{
 	filter: brightness(80%);
 }
 .undefined{
@@ -126,6 +126,8 @@ td{
 	font-size: min(5vh, 7vw);
 	text-decoration: underline;
 	text-align: center;
+	user-select: none;
+	-webkit-user-select: none;
 }
 #progress{
 	background-color: #b00;
@@ -160,6 +162,8 @@ td{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	user-select: none;
+	-webkit-user-select: none;
 }
 #cb{
 	max-height: 100%;
@@ -220,6 +224,8 @@ td{
 	line-height: 100%;
 	text-align: left;
 	grid-area: stats;
+	user-select: none;
+	-webkit-user-select: none;
 }
 #top{
 	font-size: 1.5vw;
