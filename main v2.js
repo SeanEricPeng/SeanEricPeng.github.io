@@ -1351,7 +1351,7 @@ function updateGrid(){
 			qwerty[i] = " ";
 			inputT.value = qwerty.join("");
 		}
-		document.getElementById(i.toString()).setAttribute("class", inputT.value[i]);
+		document.getElementById(i.toString()).setAttribute("class", (coloursb.includes(inputT.value[i]) ? inputT.value[i] : "undefined"));
 	};
 	result = getAmount();
 	for(let i=0; i<6; i++){
