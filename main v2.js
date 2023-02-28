@@ -1122,7 +1122,6 @@ vid.addEventListener("ended", function(){
 		}
 		else{
 			bar.style.width = "100%";
-			bar.style.borderRadius = "10px";
 			progress.innerText = "DONE!";
 			console.log("done");
 			vid.src = "./Anims/"+solution[turnNo]+".mp4";
@@ -1368,6 +1367,7 @@ function updateGrid(){
 inputT.addEventListener("input", updateGrid);
 var palette = document.getElementById("palette");
 var palette2 = document.getElementById("palette2");
+var cbcontainer = document.getElementById("cbcontainer");
 function resize(){
 	if(innerWidth/innerHeight < 1.5){
 		gridel.style.width = "100%";
@@ -1386,6 +1386,14 @@ function resize(){
 		stats.style.width = "100%";
 		stats.style.fontSize = stats.offsetWidth/17+"px";
 		stats.style.height = stats.offsetWidth/17*13+"px";
+	}
+	if(cbcontainer.clientWidth < cbcontainer.clientHeight){
+		cb.style.width = "100%";
+		cb.style.height = cb.clientWidth+"px";
+	}
+	else{
+		cb.style.width = "";
+		cb.style.height = "";
 	}
 	tada.style.height = "100%";
 	tada.style.fontSize = Math.min(tada.clientHeight, tada.clientWidth*0.8)+"px";
