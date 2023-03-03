@@ -1139,7 +1139,7 @@ vid.addEventListener("ended", function(){
 });
 window.addEventListener("keydown", function(e){
 	if("ogwbyr".includes(e.key)){
-		currColour = e.key;
+		setColour(e.key);
 	}
 })
 function pause(){
@@ -1331,10 +1331,14 @@ function getAmount(){
 }
 function setColour(hi){
 	for(let i of document.getElementsByClassName("p")){
-		i.style.border = "3px solid black";
+		if(i.getAttribute("class")[0] == hi){
+			i.style.border = "3px dashed black";
+		}
+		else{
+			i.style.border = "3px solid black";
+		}
 	}
-	currColour = hi.getAttribute("class")[0];
-	hi.style.border = "3px dashed black";
+	currColour = hi;
 }
 function updateText(){
 	let sdfsd = "";
