@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chess</title>
+	<style>
+		body{
+			margin: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100vw;
+			height: 100vh;
+		}
+		table{
+			border: 1px solid black;
+			border-collapse: collapse;
+			table-layout: fixed;
+			width: auto;
+			height: 100vmin;
+			border-spacing: 0px;
+			aspect-ratio: 1;
+		}
+		td{
+			border-spacing: 0px;
+			user-select: none;
+			-webkit-user-select: none;
+			user-drag: none;
+			-webkit-user-drag: none;
+			overflow: hidden;
+			padding: 0;
+		}
+		img{
+			height: 100%;
+			user-drag: none;
+			-webkit-user-drag: none;
+		}
+		.light{
+			background-color: rgb(200, 175, 140);
+		}
+		.dark{
+			background-color: rgb(150, 75, 0);
+		}
+		.available{
+			-webkit-mask-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 40%, black 40%);
+			mask-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 40%, black 40%);
+		}
+	</style>
+</head>
+<body>
+	<table id="chessBoard"></table>
+	<script src="main.js"></script>
+</body>
+</html>
