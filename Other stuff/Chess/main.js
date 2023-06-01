@@ -87,16 +87,39 @@ class board{
 		return(this.fenToGame());
 	}
 	isGameOver(color){
+		let counter = [];
+		let counterb = [];
+		let isCheckMate = true;
 		for(let i=0; i<8; i++){
 			for(let j=0; j<8; j++){
 				if((this.boardArray[i][j] != null) && (this.boardArray[i][j].color == color)){
 					if(this.boardArray[i][j].getMoves(i, j, false, this.boardArray).length != 0){
-						return;
+						isCheckMate = false;
+						counter.push(this.boardArray[i][j].key[0]);
+					}
+				}
+				else if(this.boardArray[i][j] != null){
+					counterb.push(this.boardArray[i][j].key[0]);
+				}
+			}
+		}
+		if(isCheckMate && piece.prototype.inCheck(color, this.boardArray)){
+			alert("Checkmate! "+((color=="b") ? "You won!" : "You lost!"));
+		}
+		else if(isCheckMate){
+			alert("Stalemate! It's a draw!");
+		}
+		else{
+			if(counter.length < 3){
+				if(!counter.some((el) => "qrp".includes(el))){
+					if(counterb.length < 3){
+						if(!counterb.some((el) => "qrp".includes(el))){
+							alert("Insufficient material! It's a draw!");
+						}
 					}
 				}
 			}
 		}
-		alert("Game over! "+((color=="b") ? "You won!" : "You lost!"));
 	}
 	getAllBlackMoves(){
 		let list = [];
@@ -125,19 +148,19 @@ class board{
 		let column = 0;
 		this.boardArray = [[]];
 		for(let i=0; i<this.position.length; i++){
-			if(standard[i]=="/"){
+			if(this.position[i]=="/"){
 				this.boardArray.push([]);
 				row++;
 				column = 0;
 			}
-			else if(!isNaN(standard[i])){
-				for(let j=0; j<Number(standard[i]); j++){
+			else if(!isNaN(this.position[i])){
+				for(let j=0; j<Number(this.position[i]); j++){
 					this.boardArray[row][column+j] = null;
 				}
-				column += Number(standard[i]);
+				column += Number(this.position[i]);
 			}
 			else{
-				this.boardArray[row][column] = Object.assign(Object.create(Object.getPrototypeOf(key[standard[i]])), JSON.parse(JSON.stringify(key[standard[i]])));
+				this.boardArray[row][column] = Object.assign(Object.create(Object.getPrototypeOf(key[this.position[i]])), JSON.parse(JSON.stringify(key[this.position[i]])));
 				column++;
 			}
 		}
@@ -178,8 +201,9 @@ class board{
 					this.boardArray[from[0]][from[1]] = null;
 					f.moves++;
 					lastToMove = f;
-					this.isGameOver("w");
-					this.isGameOver("b");
+					document.getElementById(String(from[0])+String(from[1])).innerHTML = "<img src='Pieces/empty.svg'>";
+					document.getElementById(String(to[0])+String(to[1])).innerHTML = "<img src='Pieces/"+f.key+".svg'>";
+					setTimeout(() => this.isGameOver(opposite(f.color)), 500);
 				}
 				else{
 					throw("You can't capture your own piece!")
@@ -192,8 +216,6 @@ class board{
 		else{
 			throw("No piece there!");
 		}
-		document.getElementById(String(from[0])+String(from[1])).innerHTML = "<img src='Pieces/empty.svg'>";
-		document.getElementById(String(to[0])+String(to[1])).innerHTML = "<img src='Pieces/"+f.key+".svg'>";
 	}
 	getAllLocations(color, scenario=this.boardArray){
 		let result = [];
