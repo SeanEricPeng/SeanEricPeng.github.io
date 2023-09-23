@@ -99,14 +99,6 @@ var colours = {"o": orange, "g": green, "w": white, "b": blue, "y": yellow, "r":
 var coloursb = ["o", "g", "w", "b", "y", "r"];
 var cFace = {"o": "U", "g": "L", "w": "F", "b": "R", "y": "B", "r": "D"};
 var requestb = 0;
-document.addEventListener("click", function(){
-	if(document.documentElement.requestFullscreen){
-		document.documentElement.requestFullscreen();
-	}
-	else{
-		document.documentElement.webkitRequestFullscreen();
-	}
-});
 function allbtwn(numa, numb){
 	let wqr = [];
 	for(let i=numa; i<=numb; i++){
