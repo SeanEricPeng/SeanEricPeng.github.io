@@ -60,7 +60,6 @@ html{
 }
 #score{
 	background-color: rgb(125, 0, 255);
-	height: calc(100% - 100px);
 	width: 90%;
 	margin: 10px 0 0 0;
 	text-align: center;
@@ -71,7 +70,7 @@ html{
     justify-items: center;
 	grid-template-columns: 1fr 1fr min-content 1fr 1fr;
 	font-size: 50px;
-	min-height: 75%;
+	height: 75%;
 }
 h1{
 	font-size: 50px;
@@ -137,4 +136,7 @@ input{
 }
 svg{
 	width: 50%;
+}
+#scoreSvg1, #scoreSvg2{
+	min-height: fit-content;
 }
