@@ -172,7 +172,7 @@ class Board{
 	}
 	midpoint(square){
 		let rect = table.childNodes[Math.floor(square/3)].childNodes[square%3].getBoundingClientRect();
-		return({x: rect.x+rect.width/2, y: rect.y+rect.height/2});
+		return({x: rect.x-scrollX+rect.width/2, y: rect.y-scrollY+rect.height/2});
 	}
 	cellsEqual(...cells){
 		cells = cells.map((el)=>{return this.position[el]});
