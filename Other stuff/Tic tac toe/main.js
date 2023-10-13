@@ -281,24 +281,24 @@ function minimax(board, player, depth, path=[]){
 function svgChange(what){
 	if(what=="human"){
 		startSvg[0].style.display = "none";
-		startSvg[1].style.display = "block";
+		startSvg[1].style.display = "inline-block";
 		startSvg[2].style.display = "none";
-		startSvg[3].style.display = "block";
+		startSvg[3].style.display = "inline-block";
 		
 		scoreSvg[0].style.display = "none";
-		scoreSvg[1].style.display = "block";
+		scoreSvg[1].style.display = "inline-block";
 		scoreSvg[2].style.display = "none";
-		scoreSvg[3].style.display = "block";
+		scoreSvg[3].style.display = "inline-block";
 	}
 	else{
-		startSvg[0].style.display = "block";
+		startSvg[0].style.display = "inline-block";
 		startSvg[1].style.display = "none";
-		startSvg[2].style.display = "block";
+		startSvg[2].style.display = "inline-block";
 		startSvg[3].style.display = "none";
 		
-		scoreSvg[0].style.display = "block";
+		scoreSvg[0].style.display = "inline-block";
 		scoreSvg[1].style.display = "none";
-		scoreSvg[2].style.display = "block";
+		scoreSvg[2].style.display = "inline-block";
 		scoreSvg[3].style.display = "none";
 	}
 }
