@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic tac toe</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body>
+	<table id="table">
+	</table>
+	<div id="options" class="menu">
+		<h1><u>Options</u></h1>
+		<div class="cont" id="mode">
+			<h2 style="grid-row: 1; grid-column: 1 / 4">Mode</h2>
+			<div style="display: grid; grid-template-columns: auto min-content auto; grid-template-rows: 1fr; align-items: center;">
+				<svg width="50" height="75" style="float: left">
+					<rect width="50" height="20" x="0" y="55" style="fill:rgb(0,0,0);"/>
+					<circle cx="25" cy="55" r="25"/>
+					<circle cx="25" cy="15" r="15"/>
+				</svg>
+				<span>v</span>
+				<svg width="50" height="75" style="float: right">
+					<rect width="40" height="5" x="5" y="70" style="fill:rgb(0,0,0);"/>
+					<rect width="5" height="50" x="22.5" y="20" style="fill:rgb(0,0,0);"/>
+					<rect width="50" height="40" x="0" y="15" style="fill:rgb(0,0,0);"/>
+				</svg>
+			</div>
+			<label class="switch"><input type="checkbox" onclick="bob.modeSwitch(this)"><span class="slider"></span></label>
+			<div style="display: grid; grid-template-columns: auto min-content auto; grid-template-rows: 1fr; align-items: center">
+				<svg width="50" height="75" style="float: left">
+					<rect width="50" height="25" x="0" y="55" style="fill:rgb(0,0,0);"/>
+					<circle cx="25" cy="55" r="25"/>
+					<circle cx="25" cy="15" r="15"/>
+				</svg>
+				<span>v</span>
+				<svg width="50" height="75" style="float: right">
+					<rect width="50" height="20" x="0" y="55" style="fill:rgb(0,0,0);"/>
+					<circle cx="25" cy="55" r="25"/>
+					<circle cx="25" cy="15" r="15"/>
+				</svg>
+			</div>
+		</div>
+		<hr/>
+		<div class="cont" id="starter">
+			<h2 style="grid-row: 1; grid-column: 1 / 4">Starting Player</h2>
+			<div id="startSvg1">
+				<svg width="50" height="75" style="display: block">
+					<rect width="50" height="20" x="0" y="55" style="fill:rgb(0,0,0);"/>
+					<circle cx="25" cy="55" r="25"/>
+					<circle cx="25" cy="15" r="15"/>
+				</svg>
+				<svg width="50" height="75" style="display: none">
+					<line x1="0" y1="0" x2="50" y2="75" style="stroke:black; stroke-width:15"></line>
+					<line x1="50" y1="0" x2="0" y2="75" style="stroke:black; stroke-width:15"></line>
+				</svg>
+			</div>
+			<label class="switch"><input type="checkbox" onclick="bob.turnSwitch(this)"><span class="slider"></span></label>
+			<div id="startSvg2">
+				<svg width="50" height="75" style="display: block">
+					<rect width="40" height="5" x="5" y="70" style="fill:rgb(0,0,0);"/>
+					<rect width="5" height="50" x="22.5" y="20" style="fill:rgb(0,0,0);"/>
+					<rect width="50" height="40" x="0" y="15" style="fill:rgb(0,0,0);"/>
+				</svg>
+				<svg width="50" height="75" style="display: none">
+					<ellipse cx="25" cy="37.5" rx="17.5" ry="30" style="stroke:black; fill:none; stroke-width:15"/>
+				</svg>
+			</div>
+		</div>
+		<div id="score" class="menu">
+			<div id="scoreSvg1">
+				<svg width="50" height="75" style="float: left">
+					<rect width="50" height="20" x="0" y="55" style="fill:rgb(0,0,0);"/>
+					<circle cx="25" cy="55" r="25"/>
+					<circle cx="25" cy="15" r="15"/>
+				</svg>
+				<svg width="50" height="75" style="display: none">
+					<line x1="0" y1="0" x2="50" y2="75" style="stroke:black; stroke-width:15"></line>
+					<line x1="50" y1="0" x2="0" y2="75" style="stroke:black; stroke-width:15"></line>
+				</svg>
+			</div>
+			<div id="score1">0</div>
+			<div>-</div>
+			<div id="score2">0</div>
+			<div id="scoreSvg2">
+				<svg width="50" height="75" style="float: right">
+					<rect width="40" height="5" x="5" y="70" style="fill:rgb(0,0,0);"/>
+					<rect width="5" height="50" x="22.5" y="20" style="fill:rgb(0,0,0);"/>
+					<rect width="50" height="40" x="0" y="15" style="fill:rgb(0,0,0);"/>
+				</svg>
+				<svg width="50" height="75" style="display: none">
+					<ellipse cx="25" cy="37.5" rx="17.5" ry="30" style="stroke:black; fill:none; stroke-width:15"/>
+				</svg>
+			</div>
+		</div>
+	</div>
+	<center style="position: absolute; width: 0px; height: 0px;">
+		<div id="line">
+		</div>
+	</center>
+	<div id="thing">Please rotate your device or resize your window!</div>
+	<script src="main.js"></script>
+</body>
+</html>
