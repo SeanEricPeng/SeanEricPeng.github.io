@@ -1,4 +1,4 @@
-const table = document.getElementById("table");
+const table = document.getElementById("table").children[1];
 const line = document.getElementById("line");
 const score1 = document.getElementById("score1");
 const score2 = document.getElementById("score2");
