@@ -12,7 +12,7 @@ span{
 }
 td{
 	height: 33%;
-	width: 33%;
+	aspect-ratio: 1;
 	text-align: center;
 	font-size: 15vh;
 	background-color: lightblue;
@@ -139,4 +139,7 @@ svg{
 }
 #scoreSvg1, #scoreSvg2{
 	min-height: fit-content;
+}
+col{
+	width: 33%;
 }
