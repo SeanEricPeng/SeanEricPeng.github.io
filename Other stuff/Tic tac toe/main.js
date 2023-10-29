@@ -27,6 +27,11 @@ function box(){
 }
 addEventListener("resize", box);
 box();
+addEventListener("keypress", (e)=>{
+	if("123".includes(e.key)){
+		bob.difficulty = Number(e.key);
+	}
+})
 class Board{
 	constructor(position){
 		this.position = position;
@@ -39,6 +44,7 @@ class Board{
 		this.score = [0, 0];
 		this.setMode = "computer";
 		this.playing = false;
+		this.difficulty = 3;
 	}
 	draw(){
 		table.innerHTML = "";
@@ -137,9 +143,15 @@ class Board{
 					else if((this.mode=="computer") && human){
 						console.log("thinking...");
 						setTimeout(()=>{
-							let temp = minimax(this, this.turn, 0);
-							console.log(temp);
-							this.doMove(temp, this.turn, false, false);
+							let temp = this.getFree();
+							if(this.difficulty==2){
+								this.doMove(temp[Math.floor(Math.random()*temp.length)], this.turn, false, false);
+							}
+							else{
+								let temp = minimax(this, this.turn, 0);
+								console.log(temp);
+								this.doMove(temp, this.turn, false, false);
+							}
 						},500);
 					}
 				}
@@ -235,8 +247,10 @@ class Board{
 		}
 		return [false, false];
 	}
-	count0s(){
-		return this.position.filter(el => el==0).length;
+	getFree(){
+		let output = [];
+		this.position.map((el, ind)=>{el==0 ? output.push(ind) : null});
+		return output;
 	}
 }
 function score(game, depth){
@@ -261,7 +275,7 @@ function minimax(board, player, depth, path=[]){
 		scores.push(minimax(board.copyMove(el, player), -player, depth, lol));
 	});
 	let temp = scores.map((el)=>el[0]);
-	if(player==1){
+	if((player==1 && bob.difficulty==3) || (bob.difficulty==1 && player==-1)){
 		if(depth == 1){
 			return(scores[temp.indexOf(Math.max(...temp))][1][0]);
 		}
@@ -269,7 +283,7 @@ function minimax(board, player, depth, path=[]){
 			return(scores[temp.indexOf(Math.max(...temp))]);
 		}
 	}
-	if(player==-1){
+	else{
 		if(depth == 1){
 			return(scores[temp.indexOf(Math.min(...temp))][1][0]);
 		}
